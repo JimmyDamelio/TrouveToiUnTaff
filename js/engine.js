@@ -581,6 +581,7 @@ window.TTU = (() => {
 
   const suggestionsFor = (list, domain) => (list === 'competences' ? SKILLS[domain] : list === 'langues' ? LANGUAGES : []) || [];
   function suggestHtml(list, domain, data) {
+    if (list !== 'competences' && list !== 'langues') return '';
     const have = new Set(data[list].map(x => x.nom.trim().toLowerCase()));
     const items = suggestionsFor(list, domain).filter(x => !have.has(x.toLowerCase()));
     const label = list === 'competences' ? `Idées · ${esc(DOMAINS[domain].name)}` : 'Langues courantes';
