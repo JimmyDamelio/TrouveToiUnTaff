@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TrouveToiUnTaf · Générateur de CV et lettre de motivation gratuit</title>
-<meta name="description" content="Crée ton CV et ta lettre de motivation en quelques minutes : 11 modèles, couleurs et polices au choix, phrases types par métier, conseils en direct, export PDF. Gratuit, sans compte, tes données restent dans ton navigateur.">
+<title>TrouveToiUnTaf · Ton CV et ta lettre de motivation, page après page</title>
+<meta name="description" content="Écris ton CV ou ta lettre de motivation comme un livre, chapitre après chapitre, avec des guides et des idées de phrases. 26 modèles, PDF A4 impeccable. Gratuit, sans compte, tes données restent dans ton navigateur.">
 <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#161512" media="(prefers-color-scheme: dark)">
 <meta property="og:title" content="TrouveToiUnTaf · CV et lettre de motivation gratuits">
-<meta property="og:description" content="11 modèles, aide à la rédaction, export PDF. Gratuit, sans compte, 100 % privé.">
+<meta property="og:description" content="Ton CV écrit page après page, avec des guides. PDF A4 impeccable, gratuit, 100 % privé.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f5f2ea'/><rect x='8' y='5' width='16' height='22' rx='1.5' fill='white' stroke='%231f3a93' stroke-width='1.6'/><path d='M11.5 11h9M11.5 15h9M11.5 19h6' stroke='%231f3a93' stroke-width='1.6' stroke-linecap='round'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600;700;800;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Permanent+Marker&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;1,700&family=Shrikhand&family=Poppins:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap">
 <link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/book.css">
 <link rel="stylesheet" href="css/cv.css">
 <script>
   // Applied before first paint so the page never flashes the wrong theme.
@@ -25,86 +26,123 @@
   })();
 </script>
 </head>
-<body data-view="edit">
-<a class="skip-link" href="#editor">Aller à l'éditeur</a>
-
+<body class="book-body">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
-  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 21V9m0 0 4.5 4.5M12 9l-4.5 4.5M4 7V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/></symbol>
   <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V3Z"/><path d="M8 3v5h7V3M8 21v-6h8v6"/></symbol>
-  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
-  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
   <symbol id="i-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></symbol>
   <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
   <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></symbol>
   <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.5v.4M12 16.5v.01"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
 </svg>
 
-<header class="topbar no-print">
-  <div class="topbar__inner">
-    <div class="brand">
-      <div class="brand__name">TrouveToi<em>UnTaf</em></div>
-      <div class="brand__tag">Allez champion, remplis ça et va chercher du taf !</div>
+<!-- ============ Welcome: the intro plays on this screen ============ -->
+<main class="screen" id="welcome" aria-labelledby="welcomeTitle">
+  <div class="welcome">
+    <div class="welcome__art" aria-hidden="true">
+      <svg viewBox="0 0 230 320">
+        <g class="sheet-wrap" id="introSheet">
+          <rect class="sheet" x="10" y="8" width="210" height="297" rx="3"/>
+          <path class="ln" pathLength="1" stroke-width="7" d="M36 50h104"/>
+          <path class="ln ln--soft" pathLength="1" stroke-width="4" d="M36 68h70"/>
+          <path class="ln" pathLength="1" stroke-width="3" d="M36 100h40"/>
+          <path class="ln ln--soft" pathLength="1" stroke-width="3" d="M36 114h158M36 126h140"/>
+          <path class="ln" pathLength="1" stroke-width="3" d="M36 156h52"/>
+          <path class="ln ln--soft" pathLength="1" stroke-width="3" d="M36 170h150M36 182h126M36 194h146"/>
+          <path class="ln" pathLength="1" stroke-width="3" d="M36 224h46"/>
+          <path class="ln ln--soft" pathLength="1" stroke-width="3" d="M36 238h112M36 250h130"/>
+          <path class="ink" pathLength="1" d="M122 282c10-14 18-16 20-8s-4 14 4 10 12-14 18-10 2 10 10 8 10-6 16-4"/>
+        </g>
+      </svg>
     </div>
-    <div class="actions">
-      <button type="button" class="btn btn--ghost" data-cmd="example" title="Remplir avec un exemple"><svg class="i"><use href="#i-file"/></svg><span class="lbl">Exemple</span></button>
-      <button type="button" class="btn btn--ghost" data-cmd="import" title="Importer une sauvegarde .json"><svg class="i"><use href="#i-upload"/></svg><span class="lbl">Importer</span></button>
-      <button type="button" class="btn btn--ghost" data-cmd="export" title="Télécharger une sauvegarde .json"><svg class="i"><use href="#i-save"/></svg><span class="lbl">Sauvegarder</span></button>
-      <button type="button" class="btn btn--ghost btn--danger" data-cmd="clear" title="Tout effacer"><svg class="i"><use href="#i-trash"/></svg><span class="lbl">Effacer</span></button>
-      <button type="button" class="btn btn--ghost" data-cmd="theme" id="themeBtn" aria-label="Activer le thème sombre"><svg class="i"><use href="#i-moon"/></svg></button>
-      <span class="divider" aria-hidden="true"></span>
-      <button type="button" class="btn btn--primary" data-cmd="pdf" id="pdfBtn" title="Dans la fenêtre qui s'ouvre, choisis « Enregistrer au format PDF »"><svg class="i"><use href="#i-download"/></svg><span class="lbl"><span class="lbl-long">Télécharger <span class="lbl-optional">le </span></span><span id="pdfLabel">PDF</span></span></button>
+    <div class="welcome__text">
+      <p class="welcome__brand" id="introBrand">TrouveToi<em>UnTaf</em></p>
+      <h1 class="welcome__title" id="welcomeTitle" aria-label="Bienvenue."></h1>
+      <p class="welcome__lead" id="introLead">On va écrire ton CV ensemble, page après page, avec un petit guide à chaque étape. Compte une quinzaine de minutes. C’est gratuit, et rien ne quitte ton appareil.</p>
+      <p class="welcome__q" id="introQ">Prêt(e) à décrocher ton prochain taf ?</p>
+      <div class="welcome__actions" id="introActions">
+        <button type="button" class="btn btn--primary btn--lg" data-go="yes">Oui, on y va</button>
+        <button type="button" class="btn btn--lg" data-go="no">Pas encore</button>
+      </div>
+      <p class="welcome__wait" id="welcomeWait" role="status" aria-live="polite"></p>
     </div>
   </div>
-</header>
-
-<div class="view-tabs no-print" role="tablist" aria-label="Affichage">
-  <button type="button" role="tab" id="view-edit" aria-controls="editor" aria-selected="true" data-view="edit">Éditer</button>
-  <button type="button" role="tab" id="view-preview" aria-controls="previewPane" aria-selected="false" data-view="preview">Aperçu</button>
-</div>
-
-<main class="layout">
-  <section class="editor no-print" id="editor" aria-label="Éditeur">
-    <div class="editor__tabs" role="tablist" aria-label="Rubriques de l'éditeur">
-      <button type="button" role="tab" id="tab-contenu" aria-controls="panel-contenu" aria-selected="true" data-tab="contenu">Contenu</button>
-      <button type="button" role="tab" id="tab-design" aria-controls="panel-design" aria-selected="false" data-tab="design" tabindex="-1">Design</button>
-      <button type="button" role="tab" id="tab-lettre" aria-controls="panel-lettre" aria-selected="false" data-tab="lettre" tabindex="-1">Lettre</button>
-    </div>
-    <div class="panel" id="panel-contenu" role="tabpanel" aria-labelledby="tab-contenu"></div>
-    <div class="panel" id="panel-design" role="tabpanel" aria-labelledby="tab-design" hidden></div>
-    <div class="panel" id="panel-lettre" role="tabpanel" aria-labelledby="tab-lettre" hidden></div>
-  </section>
-
-  <section class="preview" id="previewPane" aria-label="Aperçu">
-    <div class="preview__bar no-print">
-      <div class="preview__doc" id="docTitle">CV</div>
-      <div class="preview__meta">
-        <button type="button" class="tips-btn" id="tipsBtn" hidden></button>
-        <span id="pageCount"></span>
-        <span class="progress"><span class="progress__track" aria-hidden="true"><span class="progress__fill" id="progressFill" style="display:block"></span></span><span id="progressText"></span></span>
-        <span class="status" id="saveStatus" data-state="saved" aria-live="polite">Enregistré</span>
-      </div>
-    </div>
-    <div class="preview__stage" id="stage">
-      <div class="preview__sizer" id="sizer"><div id="docPreview"></div></div>
-    </div>
-  </section>
+  <button type="button" class="btn btn--ghost btn--sm skip-intro" id="skipIntro" hidden>Passer l’intro</button>
 </main>
 
-<footer class="site-footer no-print">
+<!-- ============ Choice: CV or cover letter ============ -->
+<main class="screen" id="choice" hidden aria-labelledby="choiceTitle">
+  <div class="doc-choice">
+    <p class="doc-choice__eyebrow">C’est parti.</p>
+    <h1 class="doc-choice__title" id="choiceTitle" tabindex="-1">Qu’est-ce qu’on écrit aujourd’hui ?</h1>
+    <div class="doc-choice__grid">
+      <button type="button" class="doc-card" data-doc="cv">
+        <span class="doc-card__sheet" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <span><span class="doc-card__name">Mon CV</span><span class="doc-card__desc" style="display:block">11 chapitres courts, de la photo au PDF. Un guide t’accompagne à chaque page.</span><span class="doc-card__resume" id="resumeCv" style="display:block"></span></span>
+      </button>
+      <button type="button" class="doc-card doc-card--letter" data-doc="lettre">
+        <span class="doc-card__sheet" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <span><span class="doc-card__name">Ma lettre de motivation</span><span class="doc-card__desc" style="display:block">Assortie à ton CV, avec un brouillon écrit à partir de ton parcours.</span><span class="doc-card__resume" id="resumeLettre" style="display:block"></span></span>
+      </button>
+    </div>
+    <p class="doc-choice__more">Tu préfères tout régler toi-même d’un coup ? Passe en <a href="atelier.html">mode expert</a>.</p>
+  </div>
+</main>
+
+<!-- ============ The book ============ -->
+<div class="screen" id="book" hidden>
+  <header class="book-bar">
+    <div class="book-bar__inner">
+      <button type="button" class="book-bar__brand" data-home title="Revenir au choix CV ou lettre">TrouveToi<em>UnTaf</em></button>
+      <button type="button" class="btn btn--sm toc-btn" data-cmd="toc" aria-expanded="false" aria-controls="toc"><svg class="i"><use href="#i-list"/></svg>Sommaire</button>
+      <div class="book-bar__progress"><span id="progressLabel"></span><span class="book-bar__track" aria-hidden="true"><span class="book-bar__fill" id="progressFill" style="display:block"></span></span></div>
+      <div class="book-bar__actions">
+        <span class="status" id="saveStatus" data-state="saved" aria-live="polite">Enregistré</span>
+        <button type="button" class="btn btn--ghost btn--sm" data-cmd="theme" id="themeBtn" aria-label="Activer le thème sombre"><svg class="i"><use href="#i-moon"/></svg></button>
+        <a class="btn btn--ghost btn--sm" href="atelier.html"><span class="lbl">Mode expert</span><svg class="i" aria-hidden="true"><use href="#i-next"/></svg></a>
+      </div>
+    </div>
+  </header>
+  <div class="book">
+    <nav class="toc" id="toc" aria-label="Sommaire"></nav>
+    <div class="spread">
+      <section class="page page--left" aria-label="Chapitre">
+        <div class="page__inner" id="pageInner"></div>
+      </section>
+      <section class="page page--right" id="pageRight" aria-label="Aperçu du document">
+        <div class="page__head">
+          <span><strong id="docTitle">Ton CV en direct</strong> · <span id="pageCount"></span></span>
+          <button type="button" class="btn btn--sm peek-close" data-cmd="peek"><svg class="i"><use href="#i-x"/></svg>Fermer</button>
+        </div>
+        <div class="page__stage" id="stage"><div class="preview__sizer" id="sizer"><div id="docPreview"></div></div></div>
+      </section>
+    </div>
+  </div>
+  <button type="button" class="btn btn--primary peek-btn" data-cmd="peek"><svg class="i"><use href="#i-eye"/></svg>Voir mon CV</button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="photoInput" class="sr-only" accept="image/*" tabindex="-1" aria-hidden="true">
+
+<footer class="site-footer" id="siteFooter">
   <p>Gratuit et sans compte : ton CV reste dans ton navigateur.</p>
   <p class="owner">© <span id="year">2026</span> TrouveToiUnTaf · Appartient à <strong>Edunos Studio</strong></p>
 </footer>
 
-<div class="toast no-print" id="toast" role="status" aria-live="polite"></div>
-<input type="file" id="importInput" class="sr-only" accept="application/json,.json" tabindex="-1" aria-hidden="true">
-
 <script src="js/content.js"></script>
-<script src="js/app.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/book.js"></script>
 </body>
 </html>

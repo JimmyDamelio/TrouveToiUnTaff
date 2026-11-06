@@ -15,6 +15,24 @@ window.TTU_CONTENT = (() => {
     'bold-creative':     { name: 'Bold Creative',     desc: 'Audacieux, pour les créatifs',     accent: '#dc2626', paper: '#fcd34d', side: false },
     'tech-futurist':     { name: 'Tech Futurist',     desc: 'Terminal, pour les devs',          accent: '#00ff88', paper: '#0f172a', side: false },
     'dark-mode':         { name: 'Dark Edition',      desc: 'Fond sombre, accent vif',          accent: '#06b6d4', paper: '#18181b', side: false },
+    'studio-bleu':       { name: 'Studio Bleu',       desc: 'Grand nom en relief, touche manuscrite', accent: '#1555c6', paper: '#fefefe', side: 'right' },
+    'bulles':            { name: 'Bulles',            desc: 'Cartes arrondies, tout en douceur',  accent: '#18428e', paper: '#e7f3fd', side: false, cards: true },
+    'pilule':            { name: 'Pilule',            desc: 'Colonne blanche arrondie sur fond bleu', accent: '#4f86c6', paper: '#bed8ed', side: 'left' },
+    'bordeaux':          { name: 'Bordeaux',          desc: 'Fond bordeaux, contenu sur carte blanche', accent: '#a1122b', paper: '#5c010e', side: 'left', nameSide: 'after' },
+    'rouge-presse':      { name: 'Rouge Presse',      desc: 'Titres massifs, colonne rouge et noire', accent: '#ab0304', paper: '#ffffff', side: 'left', nameSide: 'before' },
+    'polaroid':          { name: 'Polaroïd',          desc: 'Damier, photo instantanée, carte rose', accent: '#2a2658', paper: '#fcece5', side: 'right' },
+    'grenat':            { name: 'Grenat',            desc: 'Colonne rouge, compétences en anneaux', accent: '#8b161e', paper: '#ffffff', side: 'right', defaultLevels: 'bars' },
+    'prune':             { name: 'Prune',             desc: 'Colonne prune, titres en pastilles',  accent: '#541c23', paper: '#ffffff', side: 'left', defaultLevels: 'dots' },
+    'marine-or':         { name: 'Marine & Or',       desc: 'Bleu marine et liserés dorés',        accent: '#192b41', paper: '#f8f7f6', side: 'left', defaultLevels: 'bars' },
+    'ardoise':           { name: 'Ardoise',           desc: 'Bandeau ardoise, photo en arche',     accent: '#3b3c47', paper: '#ffffff', side: 'left', defaultLevels: 'bars' },
+    'carnet':            { name: 'Carnet',            desc: 'Papier quadrillé, feutre et bord déchiré', accent: '#e6eced', paper: '#191919', side: 'left', head: 'full', defaultLevels: 'dots',
+                           sideKeys: ['profil', 'objectif', 'formations', 'competences', 'langues', 'interets', 'infos'] },
+    'lavande':           { name: 'Lavande',           desc: 'Panneau lavande sur fond anthracite',  accent: '#a3b1f6', paper: '#212224', side: 'right' },
+    'mauve-web':         { name: 'Fenêtre Mauve',     desc: 'Quadrillage, pastilles et fenêtre web', accent: '#622e57', paper: '#f3f0ea', side: 'right', defaultLevels: 'bars',
+                           sideKeys: ['profil', 'langues', 'interets', 'certifications', 'infos', 'references'] },
+    'retro':             { name: 'Rétro',             desc: 'Typo rétro, cartes rouge cerise',     accent: '#810a12', paper: '#fefdec', side: 'left',
+                           sideKeys: ['formations', 'competences', 'certifications', 'infos', 'references'] },
+    'timbre':            { name: 'Timbre',            desc: 'Photo timbre-poste, cartes translucides', accent: '#fef3d7', paper: '#88231e', side: 'right', cards: true },
     'ats':               { name: 'ATS Sobre',         desc: 'Sans photo ni colonnes, lu par les logiciels de recrutement', accent: '#111111', paper: '#ffffff', side: false, noPhoto: true, forceLevels: 'text' }
   };
 
@@ -239,5 +257,65 @@ window.TTU_CONTENT = (() => {
     letter: { poste: 'Développeuse Full-Stack', entreprise: 'Studio Lumen', contact: 'Service recrutement', adresse: '12 rue des Lilas\n75011 Paris', lieu: 'Paris' }
   };
 
-  return { TEMPLATES, FONTS, ACCENTS, DENSITIES, LEVEL_STYLES, DOMAINS, VERBS, WEAK, CLOSINGS, EXAMPLE };
+  // Skill ideas per domain, offered as one-click chips next to the skills list.
+  const SKILLS = {
+    tech: ['JavaScript', 'Python', 'SQL', 'Git', 'React', 'API REST', 'Tests automatisés', 'Linux'],
+    vente: ['Techniques de vente', 'Encaissement', 'Prospection', 'Négociation', 'Gestion des stocks', 'Merchandising', 'Fidélisation client', 'CRM (Salesforce, HubSpot)'],
+    marketing: ['Réseaux sociaux', 'Google Ads', 'SEO', 'Canva', 'Rédaction web', 'Google Analytics', 'Emailing', 'Photoshop'],
+    admin: ['Excel', 'Word', 'Gestion d’agenda', 'Facturation', 'Paie', 'Classement et archivage', 'Accueil téléphonique', 'SAP'],
+    resto: ['Service en salle', 'Prise de commande', 'Normes HACCP', 'Mise en place', 'Bar et cocktails', 'Encaissement', 'Gestion des stocks', 'Accueil client'],
+    sante: ['Soins d’hygiène', 'Prise de constantes', 'Dossier patient informatisé', 'Gestes d’urgence (AFGSU)', 'Accompagnement social', 'Écoute active', 'Protocoles d’hygiène', 'Travail en équipe pluridisciplinaire'],
+    logistique: ['Préparation de commandes', 'CACES 1, 3, 5', 'Gestion des stocks', 'Lecture de bons de livraison', 'Logiciel WMS', 'Chargement et déchargement', 'Inventaire', 'Conduite de poids lourd'],
+    btp: ['Lecture de plans', 'Maçonnerie', 'Électricité', 'Plomberie', 'Soudure', 'Règles de sécurité chantier', 'Utilisation d’outils électroportatifs', 'Habilitation électrique'],
+    education: ['Animation de groupe', 'BAFA', 'Préparation de séquences', 'Gestion de conflits', 'Premiers secours (PSC1)', 'Activités manuelles', 'Soutien scolaire', 'Communication avec les familles'],
+    etudiant: ['Pack Office', 'Travail en équipe', 'Recherche documentaire', 'Prise de parole', 'Gestion de projet', 'Réseaux sociaux', 'Anglais professionnel', 'Organisation']
+  };
+
+  const LANGUAGES = ['Français', 'Anglais', 'Espagnol', 'Allemand', 'Italien', 'Arabe', 'Portugais', 'Chinois'];
+
+  const LEVEL_HINTS = {
+    competences: {
+      'Débutant': 'Tu en as les bases et tu l’as déjà un peu pratiqué.',
+      'Intermédiaire': 'Tu l’utilises seul(e) pour les tâches courantes.',
+      'Avancé': 'Tu le maîtrises : on peut te confier des tâches complexes.',
+      'Expert': 'Tu pourrais le former à d’autres personnes.'
+    },
+    langues: {
+      'Débutant': 'A1 à A2 : tu te présentes et tu comprends des phrases simples.',
+      'Intermédiaire': 'B1 : tu te débrouilles au quotidien et en voyage.',
+      'Courant': 'B2 à C1 : tu tiens une conversation ou une réunion de travail.',
+      'Natif': 'C’est ta langue maternelle.'
+    }
+  };
+
+  // Short guides shown next to the fields: what goes here, and how to write it well.
+  const GUIDES = {
+    photo: { q: 'Faut-il mettre une photo ?', body: 'En France, la photo n’est pas obligatoire. Elle aide surtout pour les métiers en contact avec le public : vente, accueil, restauration.',
+      tips: ['Fond clair et uni, cadrage du visage aux épaules.', 'Une tenue proche de celle du poste visé.', 'Pas de selfie, de photo de vacances ni de lunettes de soleil.', 'Grande entreprise qui trie les CV par logiciel : le modèle ATS Sobre n’affiche pas de photo.'] },
+    identite: { q: 'Quelles infos mettre ?', body: 'Juste ce qu’il faut pour qu’on te recontacte facilement.',
+      tips: ['Un email sérieux, idéalement prenom.nom@…', 'Ta ville suffit, pas besoin de l’adresse complète.', 'Le titre, c’est le poste que tu vises, pas forcément celui que tu occupes.', 'Âge, situation familiale, numéro de sécurité sociale : inutile, ce n’est pas demandé.'] },
+    accroche: { q: 'C’est quoi, une accroche ?', body: '2 ou 3 phrases tout en haut du CV : qui tu es, ce que tu apportes, ce que tu cherches. C’est souvent la seule partie lue en entier.',
+      tips: ['Adapte-la à chaque offre en reprenant un ou deux mots de l’annonce.', 'Parle de ce que tu sais faire, pas seulement de tes qualités.', 'L’objectif dit le poste ou le contrat visé, et quand tu es disponible.'] },
+    experiences: { q: 'Qu’est-ce qui compte comme expérience ?', body: 'Tout ce où tu as travaillé : CDI, CDD, intérim, stage, alternance, job d’été, mission en freelance.',
+      tips: ['Commence par la plus récente.', '2 à 4 missions par expérience, une par ligne, chacune avec un verbe d’action.', 'Un chiffre vaut mieux qu’un adjectif : « 60 clients par jour » plutôt que « beaucoup de clients ».', 'Un trou dans ton parcours ? Une formation, un projet ou du bénévolat peuvent le combler.'] },
+    formations: { q: 'Quelles formations mettre ?', body: 'Tes diplômes du plus récent au plus ancien, et les formations utiles pour le poste.',
+      tips: ['À partir de bac +2, le bac n’est plus indispensable.', 'Diplôme en cours ? Écris « en cours » ou l’année prévue.', 'Les certifications courtes (CACES, SST, TOEIC) vont dans « Les petits plus ».'] },
+    competences: { q: 'C’est quoi, une compétence ?', body: 'Ce que tu sais faire concrètement et qui sert au poste : un outil, une technique, un savoir-faire.',
+      tips: ['Exemples : Excel, encaissement, soudure, prise de commande, Photoshop, gestion des stocks.', 'Les qualités (rigueur, ponctualité) vont plutôt dans ton accroche, où tu peux les illustrer.', '6 à 10 compétences suffisent : choisis celles que l’annonce demande.', 'Reste honnête sur les niveaux : on peut te tester en entretien.'], levels: 'competences' },
+    langues: { q: 'Comment choisir mon niveau ?', body: 'Choisis le niveau qui correspond à ce que tu sais faire aujourd’hui, pas à ce que tu as étudié.', tips: [], levels: 'langues' },
+    bonus: { q: 'À quoi servent ces sections ?', body: 'Elles font la différence quand ton expérience est courte, ou quand elles touchent au poste. Aucune n’est obligatoire.',
+      tips: ['Un projet perso ou d’école prouve ce que tu sais faire.', 'Le bénévolat montre ton engagement et ce que tu sais gérer.', 'Le permis B compte pour beaucoup de postes : indique-le.', 'Centres d’intérêt : 3 ou 4, précis (« football en club depuis 8 ans » plutôt que « sport »).'] },
+    modele: { q: 'Quel modèle choisir ?', body: 'Le bon modèle dépend du secteur, pas seulement de tes goûts.',
+      tips: ['Banque, conseil, administration : Corporate, Minimal Pro ou Elegant Classic.', 'Création, communication : Studio Bleu, Polaroïd, Carnet, Lavande, Rétro ou Bold Creative.', 'Réseaux sociaux, web : Fenêtre Mauve, Timbre ou Bulles.', 'Vente, marketing, accueil : Grenat, Bordeaux, Rouge Presse ou Pilule.', 'Enseignement, santé, administration : Ardoise, Prune ou Marine & Or.', 'Tech : Tech Futurist, Timeline ou Compact.', 'Candidature en ligne dans une grande entreprise : ATS Sobre, que les logiciels de tri lisent sans erreur.'] },
+    finitions: { q: 'Les bons réglages', body: 'Une seule couleur d’accent et une police lisible suffisent.',
+      tips: ['Un CV tient idéalement sur une page, deux au maximum avec beaucoup d’expérience.', 'Les niveaux en texte sont plus clairs pour un recruteur que les points ou les barres.'] },
+    fin: { q: 'Avant d’envoyer', body: '',
+      tips: ['Relis-toi à voix haute, ou fais-toi relire : une faute se voit tout de suite.', 'Envoie toujours un PDF, jamais un document modifiable.', 'Nomme ton fichier « CV-Prénom-Nom.pdf ».', 'Adapte ton titre et ton accroche à chaque offre.'] },
+    destinataire: { q: 'À qui adresser la lettre ?', body: 'Si l’annonce donne un nom, utilise-le : « Madame Dupont » touche plus que « Madame, Monsieur ».',
+      tips: ['Pas de nom ? Le service recrutement, ou le responsable du poste.', 'Reprends l’intitulé exact du poste de l’annonce.', 'Candidature spontanée : écris-le dans l’objet.'] },
+    texte: { q: 'Comment structurer ta lettre ?', body: 'Trois paragraphes courts, sur une page : vous, moi, nous.',
+      tips: ['Vous : ce qui t’attire chez cette entreprise, précisément.', 'Moi : une ou deux réussites qui prouvent que tu peux faire le poste.', 'Nous : ce que vous ferez ensemble, et la demande d’entretien.', '250 à 350 mots, c’est la bonne longueur.'] }
+  };
+
+  return { TEMPLATES, FONTS, ACCENTS, DENSITIES, LEVEL_STYLES, DOMAINS, VERBS, WEAK, CLOSINGS, EXAMPLE, SKILLS, LANGUAGES, LEVEL_HINTS, GUIDES };
 })();
