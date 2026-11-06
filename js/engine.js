@@ -121,7 +121,7 @@ window.TTU = (() => {
     letter: blankLetter()
   });
   const defaultSettings = () => ({
-    template: 'minimal-pro', accent: '', font: 'auto', density: 'normal', fitD: 1, levels: 'text',
+    template: 'minimal-pro', accent: '', font: 'auto', density: 'normal', fitD: 1, levels: 'text', levelsSet: false,
     order: [...DEFAULT_ORDER], hidden: [], domain: 'tech', tab: 'contenu'
   });
 
@@ -156,6 +156,7 @@ window.TTU = (() => {
     if (DENSITIES[raw.density] || raw.density === 'fit') s.density = raw.density;
     if (typeof raw.fitD === 'number' && raw.fitD >= 0.7 && raw.fitD <= 1.1) s.fitD = raw.fitD;
     if (LEVEL_STYLES[raw.levels]) s.levels = raw.levels;
+    s.levelsSet = raw.levelsSet === true;
     if (DOMAINS[raw.domain]) s.domain = raw.domain;
     if (TABS.includes(raw.tab)) s.tab = raw.tab;
     if (Array.isArray(raw.order)) {
@@ -198,7 +199,7 @@ window.TTU = (() => {
       ${title.trim() && sub.trim() ? `<p class="entry__sub">${esc(sub)}</p>` : ''}${desc}</div>`;
   const levelList = items => `<ul class="levels">${items.map(x => {
     const r = LEVEL_RANK[x.niveau] || 2;
-    return `<li class="level"><span class="level__name">${esc(x.nom)}</span><span class="level__label">${esc(x.niveau)}</span>`
+    return `<li class="level" style="--p:${r * 25}%"><span class="level__name">${esc(x.nom)}</span><span class="level__label">${esc(x.niveau)}</span>`
       + `<span class="dots" aria-hidden="true">${[1, 2, 3, 4].map(n => `<i${n <= r ? ' class="on"' : ''}></i>`).join('')}</span>`
       + `<span class="meter" aria-hidden="true"><i style="width:${r * 25}%"></i></span></li>`;
   }).join('')}</ul>`;
@@ -254,7 +255,7 @@ window.TTU = (() => {
     const style = [`--d:${densityValue(s)}`];
     if (s.accent) style.push(`--a:${s.accent}`);
     if (f.head) style.push(`--fh:${f.head}`, `--fb:${f.body}`);
-    return `<article class="cv cv--${s.template} lv-${t.forceLevels || s.levels}${t.side ? ' cv--side' : ''}${t.cards ? ' cv--cards' : ''}${extra}" style="${esc(style.join(';'))}">`;
+    return `<article class="cv cv--${s.template} lv-${t.forceLevels || (!s.levelsSet && t.defaultLevels) || s.levels}${t.side ? ' cv--side' : ''}${t.cards ? ' cv--cards' : ''}${extra}" style="${esc(style.join(';'))}">`;
   }
 
   function layout(d, s, sideHtml, mainHtml, fullHtml) {

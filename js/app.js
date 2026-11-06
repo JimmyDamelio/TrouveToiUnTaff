@@ -462,6 +462,7 @@
     } else if (ds.set === 'density' && ds.value === 'fit') fitPage();
     else if (ds.set && 'value' in ds) {
       settings[ds.set] = ds.value;
+      if (ds.set === 'levels') settings.levelsSet = true;
       updateDesignState(); changed();
     } else if (ds.secMove) moveSection(el);
     else if (ds.action) listAction(el);
