@@ -263,3 +263,14 @@
 .cv--ats .chips li { display: inline; border: 0; padding: 0; font-size: 1em; }
 .cv--ats .chips li + li::before { content: ', '; }
 .cv--ats .refs { grid-template-columns: 1fr 1fr; }
+
+/* ============ Printing: only the off-screen print copy, full-bleed A4 ============
+   The engine paginates that copy into whole A4 pages before every print. */
+#printHost { position: fixed; left: -10000px; top: 0; width: 210mm; pointer-events: none; }
+@page { size: A4; margin: 0; }
+@media print {
+  html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+  body > *:not(#printHost) { display: none !important; }
+  #printHost { position: static; left: auto; width: 210mm; }
+  #printHost > .cv { box-shadow: none !important; }
+}

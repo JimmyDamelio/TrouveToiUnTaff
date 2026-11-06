@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 const { chromium } = createRequire(import.meta.url)('playwright');
 
-const url = pathToFileURL(new URL('../index.html', import.meta.url).pathname).href;
+const url = pathToFileURL(new URL('../atelier.html', import.meta.url).pathname).href;
 const shots = process.env.SHOTS;
 const TEMPLATES = ['minimal-pro', 'corporate', 'timeline', 'modern-asymmetric', 'compact', 'elegant-classic', 'pastel', 'bold-creative', 'tech-futurist', 'dark-mode', 'ats'];
 
@@ -85,7 +85,7 @@ await page.uncheck('[data-sec-toggle="interets"]');
 await page.click('[data-sec-move="up"][data-key="formations"]');
 await settle();
 const style = await page.locator('#docPreview .cv').getAttribute('style');
-assert.match(style, /--a:#b91c1c/); assert.match(style, /Source Serif 4/); assert.match(style, /--d:0.9/);
+assert.match(style, /--a:\s*#b91c1c/); assert.match(style, /Source Serif 4/); assert.match(style, /--d:\s*0.9/);
 assert.ok(await page.locator('#docPreview .cv.lv-dots .dots').first().isVisible());
 assert.equal(await page.locator('#docPreview .cv-sec--interets').count(), 0);
 const order = await page.locator('#docPreview .cv-sec').evaluateAll(els => els.map(e => e.className.match(/cv-sec--(\w+)/)[1]));
@@ -93,7 +93,7 @@ assert.ok(order.indexOf('formations') < order.indexOf('experiences'), order.join
 if (shots) await page.screenshot({ path: `${shots}/app-design.png` });
 await page.reload();
 assert.equal(await page.locator('#tab-design').getAttribute('aria-selected'), 'true');
-assert.match(await page.locator('#docPreview .cv').getAttribute('style'), /--a:#b91c1c/);
+assert.match(await page.locator('#docPreview .cv').getAttribute('style'), /--a:\s*#b91c1c/);
 await page.click('[data-set="accent"][data-value=""]');
 await page.click('[data-set="font"][data-value="auto"]');
 await page.click('[data-set="density"][data-value="normal"]');
@@ -109,15 +109,14 @@ assert.match(await page.textContent('#docPreview .letter__to'), /Studio Lumen/);
 assert.equal(await page.textContent('#pdfLabel'), 'la lettre');
 if (shots) await page.locator('#docPreview').screenshot({ path: `${shots}/letter.png` });
 
-// 9. Print shows only the sheet, unscaled, whole pages.
+// 9. Print shows only the paginated sheet, whole A4 pages.
 await page.click('#tab-contenu');
+await page.evaluate(() => dispatchEvent(new Event('beforeprint')));
 await page.emulateMedia({ media: 'print' });
 assert.equal(await page.locator('.topbar').isVisible(), false);
-assert.equal(await page.locator('#docPreview').evaluate(e => getComputedStyle(e).transform), 'none');
-await page.evaluate(() => dispatchEvent(new Event('beforeprint')));
-assert.match(await page.locator('#docPreview .cv').evaluate(e => e.style.minHeight), /^\d+mm$/);
-if (shots) await page.pdf({ path: `${shots}/cv.pdf`, format: 'A4', printBackground: true });
-await page.evaluate(() => dispatchEvent(new Event('afterprint')));
+assert.ok(await page.locator('#printHost .cv').isVisible());
+assert.match(await page.locator('#printHost .cv').evaluate(e => e.style.minHeight), /^\d+mm$/);
+if (shots) await page.pdf({ path: `${shots}/cv.pdf`, preferCSSPageSize: true, printBackground: true });
 await page.emulateMedia({ media: 'screen' });
 
 // 10. Dark theme is remembered; footer ownership line.

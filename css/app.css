@@ -301,15 +301,18 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 
+/* ---------- Guides next to the fields ---------- */
+.guide { border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: var(--radius); background: var(--paper); }
+.guide > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 9px 12px; font-size: 13.5px; font-weight: 600; color: var(--accent); transition: color var(--t) var(--ease); }
+.guide > summary::-webkit-details-marker { display: none; }
+.guide > summary:hover { color: var(--accent-hover); }
+.guide__body { padding: 0 12px 12px 38px; font-size: 13.5px; line-height: 1.55; display: grid; gap: 8px; }
+.guide__body ul { padding-left: 18px; display: grid; gap: 4px; }
+.guide__levels { display: grid; gap: 6px; margin: 0; }
+.guide__levels div { display: grid; grid-template-columns: 96px 1fr; gap: 8px; }
+.guide__levels dt { font-weight: 600; }
+.guide__levels dd { margin: 0; color: var(--muted); }
+.suggest-chips { display: grid; gap: 6px; }
+.suggest-chips:empty { display: none; }
+.verbs button svg.i { width: 12px; height: 12px; margin-right: 3px; vertical-align: -1px; }
 /* ---------- Print: only the sheet, full-bleed A4 ---------- */
-@page { size: A4; margin: 0; }
-@media print {
-  html, body { background: #fff !important; }
-  .no-print, .view-tabs, .preview__bar, .page-break { display: none !important; }
-  .layout { display: block; padding: 0; margin: 0; max-width: none; }
-  .preview { display: block !important; position: static; }
-  .preview__stage { padding: 0; max-height: none; overflow: visible; }
-  .preview__sizer { width: auto !important; height: auto !important; }
-  #docPreview { transform: none !important; box-shadow: none; }
-  /* shortcut: pages 2+ have no top margin (full-bleed backgrounds need margin:0); fine for 1-2 page CVs */
-}
