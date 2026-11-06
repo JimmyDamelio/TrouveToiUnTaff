@@ -30,6 +30,22 @@ Gratuit, sans compte, sans backend : tes données ne quittent jamais ton apparei
 - PDF vectoriel via la fenêtre d'impression (« Enregistrer au format PDF »)
 - `tests/pdf.mjs` vérifie les 11 modèles en version courte, normale et longue, plus la lettre
 
+## Structure
+
+```
+index.html       le livre (parcours guidé)
+atelier.html     le mode expert
+css/app.css      styles communs et mode expert
+css/book.css     le livre, l'ouverture, les boîtes d'allumettes
+css/cv.css       les 11 modèles de CV, la lettre, l'impression
+js/content.js    modèles, polices, phrases types, guides, exemple
+js/engine.js     moteur commun : données, rendu, pagination A4, conseils
+js/book.js       le livre
+js/app.js        le mode expert
+design/MASTER.md direction artistique
+tests/           book.mjs, smoke.mjs (mode expert), pdf.mjs
+```
+
 ## Confidentialité
 
 Tout est stocké dans le `localStorage` du navigateur. Rien n'est envoyé à un serveur.
