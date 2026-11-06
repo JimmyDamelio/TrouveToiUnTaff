@@ -255,15 +255,21 @@ window.TTU = (() => {
     const style = [`--d:${densityValue(s)}`];
     if (s.accent) style.push(`--a:${s.accent}`);
     if (f.head) style.push(`--fh:${f.head}`, `--fb:${f.body}`);
-    return `<article class="cv cv--${s.template} lv-${t.forceLevels || (!s.levelsSet && t.defaultLevels) || s.levels}${t.side ? ' cv--side' : ''}${t.cards ? ' cv--cards' : ''}${extra}" style="${esc(style.join(';'))}">`;
+    return `<article class="cv cv--${s.template} lv-${t.forceLevels || (!s.levelsSet && t.defaultLevels) || s.levels}${t.side ? ' cv--side' : ''}${t.cards ? ' cv--cards' : ''}${t.side && t.head === 'full' ? ' cv--headfull' : ''}${extra}" style="${esc(style.join(';'))}">`;
   }
 
   function layout(d, s, sideHtml, mainHtml, fullHtml) {
     const t = TEMPLATES[s.template], p = headParts(d, t);
     if (t.side) {
       // nameSide puts the name in the sidebar, above ('before') or under ('after') the photo.
+      const contact = p.contact ? sec('contact', 'Contact', p.contact) : '';
+      // head 'full': photo and name in a header across both columns.
+      if (t.head === 'full') {
+        return `${articleOpen(s)}<header class="cv__head cv__head--full">${p.photo}<div class="cv__headtext">${p.identity}</div></header>`
+          + `<aside class="cv__side">${contact}${sideHtml}</aside><div class="cv__main">${mainHtml}</div></article>`;
+      }
       const top = t.nameSide === 'before' ? p.identity + p.photo : t.nameSide === 'after' ? p.photo + p.identity : p.photo;
-      return `${articleOpen(s)}<aside class="cv__side">${top}${p.contact ? sec('contact', 'Contact', p.contact) : ''}${sideHtml}</aside>`
+      return `${articleOpen(s)}<aside class="cv__side">${top}${contact}${sideHtml}</aside>`
         + `<div class="cv__main">${t.nameSide ? '' : p.identity}${mainHtml}</div></article>`;
     }
     return `${articleOpen(s)}<header class="cv__head">${p.photo}<div class="cv__headtext">${p.identity}${p.contact}</div></header>${fullHtml}</article>`;
@@ -272,7 +278,9 @@ window.TTU = (() => {
   function renderCv(d, s) {
     const visible = s.order.filter(k => !s.hidden.includes(k));
     const pick = keys => keys.map(k => RENDER[k](d) || '').join('');
-    return layout(d, s, pick(visible.filter(k => SECTIONS[k].side)), pick(visible.filter(k => !SECTIONS[k].side)), pick(visible));
+    // A template may choose which sections sit in its column (sideKeys); otherwise each section's default.
+    const t = TEMPLATES[s.template], inSide = k => (t.sideKeys ? t.sideKeys.includes(k) : SECTIONS[k].side);
+    return layout(d, s, pick(visible.filter(inSide)), pick(visible.filter(k => !inSide(k))), pick(visible));
   }
 
   const defaultObjet = d => `Candidature au poste de ${d.letter.poste.trim() || d.jobTitle.trim() || '[poste visé]'}`;

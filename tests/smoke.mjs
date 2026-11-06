@@ -6,7 +6,7 @@ const { chromium } = createRequire(import.meta.url)('playwright');
 
 const url = pathToFileURL(new URL('../atelier.html', import.meta.url).pathname).href;
 const shots = process.env.SHOTS;
-const TEMPLATES = ['minimal-pro', 'corporate', 'timeline', 'modern-asymmetric', 'compact', 'elegant-classic', 'pastel', 'bold-creative', 'tech-futurist', 'dark-mode', 'studio-bleu', 'bulles', 'pilule', 'bordeaux', 'rouge-presse', 'polaroid', 'grenat', 'prune', 'marine-or', 'ardoise', 'ats'];
+const TEMPLATES = ['minimal-pro', 'corporate', 'timeline', 'modern-asymmetric', 'compact', 'elegant-classic', 'pastel', 'bold-creative', 'tech-futurist', 'dark-mode', 'studio-bleu', 'bulles', 'pilule', 'bordeaux', 'rouge-presse', 'polaroid', 'grenat', 'prune', 'marine-or', 'ardoise', 'carnet', 'lavande', 'mauve-web', 'retro', 'timbre', 'ats'];
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });

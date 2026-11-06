@@ -25,6 +25,14 @@ window.TTU_CONTENT = (() => {
     'prune':             { name: 'Prune',             desc: 'Colonne prune, titres en pastilles',  accent: '#541c23', paper: '#ffffff', side: 'left', defaultLevels: 'dots' },
     'marine-or':         { name: 'Marine & Or',       desc: 'Bleu marine et liserés dorés',        accent: '#192b41', paper: '#f8f7f6', side: 'left', defaultLevels: 'bars' },
     'ardoise':           { name: 'Ardoise',           desc: 'Bandeau ardoise, photo en arche',     accent: '#3b3c47', paper: '#ffffff', side: 'left', defaultLevels: 'bars' },
+    'carnet':            { name: 'Carnet',            desc: 'Papier quadrillé, feutre et bord déchiré', accent: '#e6eced', paper: '#191919', side: 'left', head: 'full', defaultLevels: 'dots',
+                           sideKeys: ['profil', 'objectif', 'formations', 'competences', 'langues', 'interets', 'infos'] },
+    'lavande':           { name: 'Lavande',           desc: 'Panneau lavande sur fond anthracite',  accent: '#a3b1f6', paper: '#212224', side: 'right' },
+    'mauve-web':         { name: 'Fenêtre Mauve',     desc: 'Quadrillage, pastilles et fenêtre web', accent: '#622e57', paper: '#f3f0ea', side: 'right', defaultLevels: 'bars',
+                           sideKeys: ['profil', 'langues', 'interets', 'certifications', 'infos', 'references'] },
+    'retro':             { name: 'Rétro',             desc: 'Typo rétro, cartes rouge cerise',     accent: '#810a12', paper: '#fefdec', side: 'left',
+                           sideKeys: ['formations', 'competences', 'certifications', 'infos', 'references'] },
+    'timbre':            { name: 'Timbre',            desc: 'Photo timbre-poste, cartes translucides', accent: '#fef3d7', paper: '#88231e', side: 'right', cards: true },
     'ats':               { name: 'ATS Sobre',         desc: 'Sans photo ni colonnes, lu par les logiciels de recrutement', accent: '#111111', paper: '#ffffff', side: false, noPhoto: true, forceLevels: 'text' }
   };
 
@@ -298,7 +306,7 @@ window.TTU_CONTENT = (() => {
     bonus: { q: 'À quoi servent ces sections ?', body: 'Elles font la différence quand ton expérience est courte, ou quand elles touchent au poste. Aucune n’est obligatoire.',
       tips: ['Un projet perso ou d’école prouve ce que tu sais faire.', 'Le bénévolat montre ton engagement et ce que tu sais gérer.', 'Le permis B compte pour beaucoup de postes : indique-le.', 'Centres d’intérêt : 3 ou 4, précis (« football en club depuis 8 ans » plutôt que « sport »).'] },
     modele: { q: 'Quel modèle choisir ?', body: 'Le bon modèle dépend du secteur, pas seulement de tes goûts.',
-      tips: ['Banque, conseil, administration : Corporate, Minimal Pro ou Elegant Classic.', 'Création, communication : Studio Bleu, Polaroïd, Bulles ou Bold Creative.', 'Vente, marketing, accueil : Grenat, Bordeaux, Rouge Presse ou Pilule.', 'Enseignement, santé, administration : Ardoise, Prune ou Marine & Or.', 'Tech : Tech Futurist, Timeline ou Compact.', 'Candidature en ligne dans une grande entreprise : ATS Sobre, que les logiciels de tri lisent sans erreur.'] },
+      tips: ['Banque, conseil, administration : Corporate, Minimal Pro ou Elegant Classic.', 'Création, communication : Studio Bleu, Polaroïd, Carnet, Lavande, Rétro ou Bold Creative.', 'Réseaux sociaux, web : Fenêtre Mauve, Timbre ou Bulles.', 'Vente, marketing, accueil : Grenat, Bordeaux, Rouge Presse ou Pilule.', 'Enseignement, santé, administration : Ardoise, Prune ou Marine & Or.', 'Tech : Tech Futurist, Timeline ou Compact.', 'Candidature en ligne dans une grande entreprise : ATS Sobre, que les logiciels de tri lisent sans erreur.'] },
     finitions: { q: 'Les bons réglages', body: 'Une seule couleur d’accent et une police lisible suffisent.',
       tips: ['Un CV tient idéalement sur une page, deux au maximum avec beaucoup d’expérience.', 'Les niveaux en texte sont plus clairs pour un recruteur que les points ou les barres.'] },
     fin: { q: 'Avant d’envoyer', body: '',

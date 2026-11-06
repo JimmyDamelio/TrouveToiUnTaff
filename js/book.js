@@ -439,7 +439,8 @@
     'minimal-pro': '#E9E4D8', corporate: '#1E3A5F', timeline: '#0F766E', 'modern-asymmetric': '#E2B13C', compact: '#5A6B7F',
     'elegant-classic': '#B89A72', pastel: '#D8B9E6', 'bold-creative': '#C8553D', 'tech-futurist': '#14213A', 'dark-mode': '#2B2B31', ats: '#F1EEE6',
     'studio-bleu': '#1555C6', bulles: '#9DC9FA', pilule: '#BED8ED', bordeaux: '#5C010E', 'rouge-presse': '#AB0304',
-    polaroid: '#F2B9DC', grenat: '#8B161E', prune: '#541C23', 'marine-or': '#192B41', ardoise: '#3B3C47'
+    polaroid: '#F2B9DC', grenat: '#8B161E', prune: '#541C23', 'marine-or': '#192B41', ardoise: '#3B3C47',
+    carnet: '#E6ECED', lavande: '#A3B1F6', 'mauve-web': '#D8A8C6', retro: '#810A12', timbre: '#88231E'
   };
   const readable = hex => {
     const n = parseInt(hex.slice(1), 16);
