@@ -223,3 +223,7 @@ useMotionValueEvent(x, "change", (latest) => {
   <motion.div variants={child} />
 </motion.div>
 ```
+
+## Reference
+
+Full API details (props, hooks, transitions): `references/api.md`, read it when the summary above is not enough.
