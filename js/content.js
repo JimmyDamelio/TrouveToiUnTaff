@@ -15,6 +15,11 @@ window.TTU_CONTENT = (() => {
     'bold-creative':     { name: 'Bold Creative',     desc: 'Audacieux, pour les créatifs',     accent: '#dc2626', paper: '#fcd34d', side: false },
     'tech-futurist':     { name: 'Tech Futurist',     desc: 'Terminal, pour les devs',          accent: '#00ff88', paper: '#0f172a', side: false },
     'dark-mode':         { name: 'Dark Edition',      desc: 'Fond sombre, accent vif',          accent: '#06b6d4', paper: '#18181b', side: false },
+    'studio-bleu':       { name: 'Studio Bleu',       desc: 'Grand nom en relief, touche manuscrite', accent: '#1555c6', paper: '#fefefe', side: 'right' },
+    'bulles':            { name: 'Bulles',            desc: 'Cartes arrondies, tout en douceur',  accent: '#18428e', paper: '#e7f3fd', side: false, cards: true },
+    'pilule':            { name: 'Pilule',            desc: 'Colonne blanche arrondie sur fond bleu', accent: '#4f86c6', paper: '#bed8ed', side: 'left' },
+    'bordeaux':          { name: 'Bordeaux',          desc: 'Fond bordeaux, contenu sur carte blanche', accent: '#a1122b', paper: '#5c010e', side: 'left', nameSide: 'after' },
+    'rouge-presse':      { name: 'Rouge Presse',      desc: 'Titres massifs, colonne rouge et noire', accent: '#ab0304', paper: '#ffffff', side: 'left', nameSide: 'before' },
     'ats':               { name: 'ATS Sobre',         desc: 'Sans photo ni colonnes, lu par les logiciels de recrutement', accent: '#111111', paper: '#ffffff', side: false, noPhoto: true, forceLevels: 'text' }
   };
 
@@ -288,7 +293,7 @@ window.TTU_CONTENT = (() => {
     bonus: { q: 'À quoi servent ces sections ?', body: 'Elles font la différence quand ton expérience est courte, ou quand elles touchent au poste. Aucune n’est obligatoire.',
       tips: ['Un projet perso ou d’école prouve ce que tu sais faire.', 'Le bénévolat montre ton engagement et ce que tu sais gérer.', 'Le permis B compte pour beaucoup de postes : indique-le.', 'Centres d’intérêt : 3 ou 4, précis (« football en club depuis 8 ans » plutôt que « sport »).'] },
     modele: { q: 'Quel modèle choisir ?', body: 'Le bon modèle dépend du secteur, pas seulement de tes goûts.',
-      tips: ['Banque, conseil, administration : Corporate, Minimal Pro ou Elegant Classic.', 'Création, communication : Bold Creative, Pastel ou Modern Asymmetric.', 'Tech : Tech Futurist, Timeline ou Compact.', 'Candidature en ligne dans une grande entreprise : ATS Sobre, que les logiciels de tri lisent sans erreur.'] },
+      tips: ['Banque, conseil, administration : Corporate, Minimal Pro ou Elegant Classic.', 'Création, communication : Studio Bleu, Bulles, Bold Creative ou Pastel.', 'Vente, accueil, restauration : Bordeaux, Rouge Presse ou Pilule.', 'Tech : Tech Futurist, Timeline ou Compact.', 'Candidature en ligne dans une grande entreprise : ATS Sobre, que les logiciels de tri lisent sans erreur.'] },
     finitions: { q: 'Les bons réglages', body: 'Une seule couleur d’accent et une police lisible suffisent.',
       tips: ['Un CV tient idéalement sur une page, deux au maximum avec beaucoup d’expérience.', 'Les niveaux en texte sont plus clairs pour un recruteur que les points ou les barres.'] },
     fin: { q: 'Avant d’envoyer', body: '',

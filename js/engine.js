@@ -235,7 +235,11 @@ window.TTU = (() => {
 
   function headParts(d, t) {
     const photo = d.photo && !t.noPhoto ? `<img class="cv__photo" src="${esc(d.photo)}" alt="Photo de ${esc(d.fullName.trim() || 'profil')}">` : '';
-    const name = d.fullName.trim() ? esc(d.fullName) : '<span class="ph">Ton nom</span>';
+    const full = d.fullName.trim(), cut = full.indexOf(' ');
+    // First and last name in their own spans so a template can set them on two lines.
+    const name = !full ? '<span class="ph">Ton nom</span>'
+      : cut < 0 ? `<span class="cv__last">${esc(full)}</span>`
+        : `<span class="cv__first">${esc(full.slice(0, cut))}</span> <span class="cv__last">${esc(full.slice(cut + 1))}</span>`;
     const title = d.jobTitle.trim() ? esc(d.jobTitle) : '<span class="ph">Ton titre professionnel</span>';
     const contacts = [d.email, d.phone, d.address, d.website].map(s => s.trim()).filter(Boolean);
     return {
@@ -250,14 +254,16 @@ window.TTU = (() => {
     const style = [`--d:${densityValue(s)}`];
     if (s.accent) style.push(`--a:${s.accent}`);
     if (f.head) style.push(`--fh:${f.head}`, `--fb:${f.body}`);
-    return `<article class="cv cv--${s.template} lv-${t.forceLevels || s.levels}${t.side ? ' cv--side' : ''}${extra}" style="${esc(style.join(';'))}">`;
+    return `<article class="cv cv--${s.template} lv-${t.forceLevels || s.levels}${t.side ? ' cv--side' : ''}${t.cards ? ' cv--cards' : ''}${extra}" style="${esc(style.join(';'))}">`;
   }
 
   function layout(d, s, sideHtml, mainHtml, fullHtml) {
     const t = TEMPLATES[s.template], p = headParts(d, t);
     if (t.side) {
-      return `${articleOpen(s)}<aside class="cv__side">${p.photo}${p.contact ? sec('contact', 'Contact', p.contact) : ''}${sideHtml}</aside>`
-        + `<div class="cv__main">${p.identity}${mainHtml}</div></article>`;
+      // nameSide puts the name in the sidebar, above ('before') or under ('after') the photo.
+      const top = t.nameSide === 'before' ? p.identity + p.photo : t.nameSide === 'after' ? p.photo + p.identity : p.photo;
+      return `${articleOpen(s)}<aside class="cv__side">${top}${p.contact ? sec('contact', 'Contact', p.contact) : ''}${sideHtml}</aside>`
+        + `<div class="cv__main">${t.nameSide ? '' : p.identity}${mainHtml}</div></article>`;
     }
     return `${articleOpen(s)}<header class="cv__head">${p.photo}<div class="cv__headtext">${p.identity}${p.contact}</div></header>${fullHtml}</article>`;
   }
@@ -374,7 +380,7 @@ window.TTU = (() => {
      get a top margin, and the sheet is a whole number of A4 pages.
      ========================================================= */
   const PAGE_TOP = 14 * MM, PAGE_BOTTOM = 14 * MM;
-  const ATOMS = ['.cv__head', '.cv__main > .cv__id', '.cv__side > .cv__photo', '.cv-sec__title', '.entry', '.levels', '.chips', '.infos',
+  const ATOMS = ['.cv__head', '.cv__main > .cv__id', '.cv__side > .cv__id', '.cv__side > .cv__photo', '.cv-sec__title', '.entry', '.levels', '.chips', '.infos',
     '.refs', '.cv-text', '.cv__side .cv__contact', '.letter__to', '.letter__place', '.letter__obj', '.letter__appel',
     '.letter__body > p', '.letter__closing', '.letter__sign'].join(',');
 
@@ -384,7 +390,13 @@ window.TTU = (() => {
     article.style.minHeight = '';
     const scale = article.getBoundingClientRect().height / article.offsetHeight || 1; // the preview is scaled down
     const y = (el, edge) => (el.getBoundingClientRect()[edge] - article.getBoundingClientRect().top) / scale;
-    const atoms = [...article.querySelectorAll(ATOMS)].filter(el => !el.parentElement.closest(ATOMS));
+    // Card templates keep each section whole when it fits on a page; a longer one breaks between its blocks.
+    const usable = A4_H - PAGE_TOP - PAGE_BOTTOM;
+    const cards = article.matches('.cv--cards')
+      ? new Set([...article.querySelectorAll('.cv-sec')].filter(el => el.offsetHeight <= usable * 0.6)) : new Set();
+    const atoms = [...cards, ...[...article.querySelectorAll(ATOMS)].filter(el => ![...cards].some(c => c.contains(el)))]
+      .filter(el => !el.parentElement.closest(ATOMS))
+      .sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
     atoms.forEach((el, i) => {
       // A section title travels with the first block under it.
       const next = atoms[i + 1];

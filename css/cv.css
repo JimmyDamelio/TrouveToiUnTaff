@@ -264,6 +264,110 @@
 .cv--ats .chips li + li::before { content: ', '; }
 .cv--ats .refs { grid-template-columns: 1fr 1fr; }
 
+/* ---------- 12. Studio Bleu (right column) ---------- */
+.cv--studio-bleu { --a: #1555c6; --fh: 'Archivo', Arial, sans-serif; --fb: 'Inter', Arial, sans-serif; grid-template-columns: 1fr 66mm; color: #14100b; font-size: calc(9.5pt * var(--d)); }
+.cv--studio-bleu::before { content: '\2726\2009\2726\2009\2726\2009\2726'; position: absolute; top: 8mm; left: 15mm; color: var(--a); font-size: calc(10pt * var(--d)); letter-spacing: 1.5mm; }
+.cv--studio-bleu .cv__main { padding: calc(18mm * var(--d)) calc(8mm * var(--d)) calc(14mm * var(--d)) calc(15mm * var(--d)); }
+.cv--studio-bleu .cv__side { order: 2; padding: calc(14mm * var(--d)) calc(13mm * var(--d)) calc(14mm * var(--d)) calc(4mm * var(--d)); }
+.cv--studio-bleu .cv__side .cv__photo { border-radius: 50%; margin: calc(2mm * var(--d)) calc(2mm * var(--d)) calc(8mm * var(--d)); width: calc(100% - 4mm); box-shadow: 0 0 0 1.6mm var(--a), 0 0 0 2.6mm #fff, 0 0 0 3mm var(--a); }
+.cv--studio-bleu .cv__name { font-size: calc(40pt * var(--d)); font-weight: 800; line-height: .92; text-transform: uppercase; letter-spacing: .01em; }
+.cv--studio-bleu .cv__first { display: block; color: transparent; -webkit-text-stroke: .45mm #14100b; }
+.cv--studio-bleu .cv__last { display: block; color: var(--a); }
+.cv--studio-bleu .cv__last::first-letter { font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 1.2em; text-transform: none; }
+.cv--studio-bleu .cv__title { color: var(--a); font-weight: 600; font-size: calc(11pt * var(--d)); margin-top: calc(3mm * var(--d)); }
+.cv--studio-bleu .cv-sec__title { font-size: calc(17pt * var(--d)); font-weight: 800; color: var(--a); text-transform: uppercase; line-height: 1.05; }
+.cv--studio-bleu .cv-sec__title::first-letter { font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 1.3em; }
+.cv--studio-bleu .cv__side .cv-sec__title { font-size: calc(14pt * var(--d)); }
+.cv--studio-bleu .entry__head { flex-direction: column; align-items: flex-start; gap: calc(.4mm * var(--d)); }
+.cv--studio-bleu .entry h3 { color: var(--a); text-transform: uppercase; font-weight: 700; font-size: .98em; }
+.cv--studio-bleu .entry h3::before { content: '\2726\00a0\00a0'; }
+.cv--studio-bleu .entry__date { color: #14100b; opacity: 1; font-weight: 700; font-size: .95em; }
+.cv--studio-bleu .entry__sub, .cv--studio-bleu .entry__desc, .cv--studio-bleu .entry__bullets { padding-left: calc(4mm * var(--d)); }
+.cv--studio-bleu .entry__bullets { margin-left: calc(4mm * var(--d)); padding-left: 0; }
+.cv--studio-bleu .cv-text { font-weight: 500; }
+.cv--studio-bleu .cv__side .cv__contact { gap: calc(2.6mm * var(--d)); font-weight: 600; }
+.cv--studio-bleu .cv__side .cv__contact li { display: flex; gap: calc(2.5mm * var(--d)); align-items: center; }
+.cv--studio-bleu .cv__side .cv__contact li::before { content: ''; flex: none; width: 2.6mm; height: 2.6mm; border-radius: 50%; background: var(--a); }
+.cv--studio-bleu .chips li { border-color: var(--a); color: var(--a); font-weight: 600; }
+
+/* ---------- 13. Bulles (rounded cards) ---------- */
+.cv--bulles { --a: #18428e; --a2: #518edd; --card: #d6e8fb; --fh: 'Nunito', Arial, sans-serif; --fb: 'Nunito', Arial, sans-serif; background: #e7f3fd; color: #0e192f; padding: calc(12mm * var(--d)); font-size: calc(9.6pt * var(--d)); }
+.cv--bulles .cv__head { display: flex; gap: calc(7mm * var(--d)); align-items: center; background: var(--card); border-radius: 9mm; padding: calc(6mm * var(--d)); }
+.cv--bulles .cv__photo { width: 48mm; height: 48mm; border-radius: 50%; border: 1.6mm solid #fff; box-shadow: 0 0 0 .5mm var(--a2); }
+.cv--bulles .cv__headtext { text-align: center; flex: 1; }
+.cv--bulles .cv__name { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-weight: 700; font-size: calc(34pt * var(--d)); color: var(--a); line-height: 1.05; }
+.cv--bulles .cv__title { font-weight: 700; font-size: calc(13pt * var(--d)); margin-top: calc(2mm * var(--d)); padding-bottom: calc(3mm * var(--d)); background: linear-gradient(var(--a2), var(--a2)) center bottom / 60% .35mm no-repeat; }
+.cv--bulles .cv__contact { justify-content: center; margin-top: calc(3mm * var(--d)); }
+.cv--bulles .cv-sec { background: var(--card); border-radius: 7mm; padding: calc(5mm * var(--d)) calc(6mm * var(--d)); margin-top: calc(5mm * var(--d)); }
+.cv--bulles .cv-sec__title { font-weight: 800; font-size: calc(13pt * var(--d)); color: var(--a); }
+.cv--bulles .entry h3 { font-weight: 800; }
+.cv--bulles .entry__date { color: var(--a); opacity: 1; font-weight: 800; }
+.cv--bulles .entry__bullets li::marker { color: var(--a); }
+.cv--bulles .levels, .cv--bulles .refs { grid-template-columns: 1fr 1fr; }
+.cv--bulles .level__label { color: var(--a); opacity: .8; }
+.cv--bulles .chips li { background: #fff; border-color: transparent; font-weight: 700; color: var(--a); }
+
+/* ---------- 14. Pilule (white pill sidebar) ---------- */
+.cv--pilule { --a: #4f86c6; --fh: 'Archivo', Arial, sans-serif; --fb: 'Inter', Arial, sans-serif; grid-template-columns: 76mm 1fr; background: linear-gradient(90deg, #a2c3e0 0 28mm, #bed8ed 28mm); color: #3e4349; font-size: calc(9.4pt * var(--d)); }
+.cv--pilule .cv__side { background: #fefefe; margin: calc(14mm * var(--d)) calc(4mm * var(--d)) calc(14mm * var(--d)) calc(10mm * var(--d)); border-radius: 31mm 31mm 14mm 14mm; padding: calc(8mm * var(--d)) calc(7mm * var(--d)) calc(14mm * var(--d)); box-shadow: 0 .8mm 2.4mm rgba(40, 60, 90, .16); }
+.cv--pilule .cv__side .cv__photo { border-radius: 50%; border: 1.4mm solid #bed8ed; margin-bottom: calc(7mm * var(--d)); }
+.cv--pilule .cv__side .cv-sec__title { color: var(--a); font-size: calc(12.5pt * var(--d)); font-weight: 700; padding-bottom: calc(1.2mm * var(--d)); border-bottom: .45mm solid color-mix(in srgb, var(--a) 55%, #fff); }
+.cv--pilule .cv__side .cv__contact { gap: calc(2mm * var(--d)); }
+.cv--pilule .cv__main { padding: calc(18mm * var(--d)) calc(12mm * var(--d)) calc(14mm * var(--d)) calc(7mm * var(--d)); }
+.cv--pilule .cv__name { font-size: calc(29pt * var(--d)); font-weight: 900; text-transform: uppercase; letter-spacing: .01em; color: #3a3e44; line-height: 1; }
+.cv--pilule .cv__title { font-size: calc(15pt * var(--d)); font-weight: 400; color: #3a3e44; margin-top: calc(1.5mm * var(--d)); }
+.cv--pilule .cv__main .cv-sec__title { font-size: calc(12.5pt * var(--d)); font-weight: 600; color: #2f3338; padding-bottom: calc(1.4mm * var(--d)); border-bottom: .35mm solid #3e4349; }
+.cv--pilule .entry h3 { color: #2f3338; font-weight: 700; }
+.cv--pilule .entry__date { opacity: 1; font-weight: 700; color: #2f3338; }
+.cv--pilule .cv__side .levels { gap: calc(1.6mm * var(--d)); }
+.cv--pilule .cv__side .level { padding-left: calc(4mm * var(--d)); position: relative; }
+.cv--pilule .cv__side .level::before { content: ''; position: absolute; left: 0; top: .55em; width: 1.4mm; height: 1.4mm; border-radius: 50%; background: #3e4349; }
+.cv--pilule .chips li { border-color: color-mix(in srgb, var(--a) 45%, #fff); }
+
+/* ---------- 15. Bordeaux (burgundy ground, white card) ---------- */
+.cv--bordeaux { --a: #a1122b; --fh: 'Archivo', Arial, sans-serif; --fb: 'Inter', Arial, sans-serif; background: #5c010e; grid-template-columns: 76mm 1fr; color: #262325; font-size: calc(9.5pt * var(--d)); }
+.cv--bordeaux .cv__side { color: #fff; text-align: center; background: #6d0717; margin: calc(12mm * var(--d)) 0 calc(12mm * var(--d)) calc(9mm * var(--d)); border-radius: 6mm 0 0 6mm; padding: calc(14mm * var(--d)) calc(8mm * var(--d)); }
+.cv--bordeaux .cv__side .cv__photo { width: 50mm; height: 50mm; aspect-ratio: auto; border-radius: 50%; margin: 0 auto calc(7mm * var(--d)); border: 1mm solid rgba(255, 255, 255, .9); }
+.cv--bordeaux .cv__name { color: #fff; font-size: calc(30pt * var(--d)); font-weight: 800; line-height: 1; letter-spacing: -.01em; }
+.cv--bordeaux .cv__first, .cv--bordeaux .cv__last { display: block; }
+.cv--bordeaux .cv__title { color: #fff; font-size: calc(13pt * var(--d)); margin-top: calc(2.5mm * var(--d)); margin-bottom: calc(4mm * var(--d)); }
+.cv--bordeaux .cv__side .cv-sec__title { color: #fff; font-size: calc(13pt * var(--d)); font-weight: 800; }
+.cv--bordeaux .cv__side .cv__contact { justify-items: center; gap: calc(3mm * var(--d)); }
+.cv--bordeaux .cv__side .level__label { opacity: .75; }
+.cv--bordeaux .cv__side .chips { justify-content: center; }
+.cv--bordeaux .cv__side .chips li { border-color: rgba(255, 255, 255, .45); }
+.cv--bordeaux .cv__main { background: #fff; margin: calc(9mm * var(--d)) calc(9mm * var(--d)) calc(9mm * var(--d)) 0; border-radius: 6mm; padding: calc(12mm * var(--d)) calc(10mm * var(--d)); }
+.cv--bordeaux .cv__main .cv-sec__title { color: var(--a); font-size: calc(15pt * var(--d)); font-weight: 800; }
+.cv--bordeaux .entry h3 { color: var(--a); font-weight: 500; font-size: 1.12em; }
+.cv--bordeaux .entry__date { color: #262325; opacity: 1; font-size: 1.05em; }
+.cv--bordeaux .entry__sub { font-style: italic; }
+.cv--bordeaux .cv__main .levels, .cv--bordeaux .cv__main .refs { grid-template-columns: 1fr 1fr; }
+
+/* ---------- 16. Rouge Presse (red and black column, heavy titles) ---------- */
+.cv--rouge-presse { --a: #ab0304; --fh: 'Archivo', Arial, sans-serif; --fb: 'Inter', Arial, sans-serif; grid-template-columns: 74mm 1fr; color: #0c0b0e; font-size: calc(9.2pt * var(--d)); }
+.cv--rouge-presse .cv__side { background: #0c0b0e; color: #fff; padding: 0 0 calc(14mm * var(--d)); }
+.cv--rouge-presse .cv__side > .cv__id { background: linear-gradient(160deg, #c40406, #6f0304); padding: calc(14mm * var(--d)) calc(8mm * var(--d)) calc(8mm * var(--d)); }
+.cv--rouge-presse .cv__name { color: #fff; font-size: calc(26pt * var(--d)); font-weight: 800; line-height: .95; text-transform: uppercase; }
+.cv--rouge-presse .cv__first { display: block; font-size: .62em; font-weight: 600; margin-bottom: calc(1mm * var(--d)); }
+.cv--rouge-presse .cv__last { display: block; }
+.cv--rouge-presse .cv__title { color: #fff; text-transform: uppercase; letter-spacing: .06em; font-size: calc(10.5pt * var(--d)); margin-top: calc(2mm * var(--d)); }
+.cv--rouge-presse .cv__side .cv__photo { width: 100%; aspect-ratio: 4 / 5; margin: 0 0 calc(6mm * var(--d)); }
+.cv--rouge-presse .cv__side > .cv-sec { padding: 0 calc(8mm * var(--d)); }
+.cv--rouge-presse .cv__side .cv-sec__title { color: #fff; text-transform: uppercase; font-size: calc(13pt * var(--d)); font-weight: 800; }
+.cv--rouge-presse .cv__side .cv-sec__title::after { content: ''; display: block; width: 12mm; height: .7mm; background: #fff; margin-top: calc(1.2mm * var(--d)); }
+.cv--rouge-presse .cv__side .meter { background: #fff; }
+.cv--rouge-presse .cv__side .chips li { border-color: rgba(255, 255, 255, .4); }
+.cv--rouge-presse .cv__main { padding: calc(14mm * var(--d)) calc(12mm * var(--d)) calc(14mm * var(--d)) calc(9mm * var(--d)); }
+.cv--rouge-presse .cv__main .cv-sec__title { font-size: calc(24pt * var(--d)); font-weight: 900; text-transform: uppercase; letter-spacing: -.01em; line-height: 1; }
+.cv--rouge-presse .cv__main .cv-sec__title::after { content: ''; display: block; width: 30mm; height: 1.3mm; background: var(--a); margin-top: calc(1.8mm * var(--d)); }
+.cv--rouge-presse .cv__main .entry { display: grid; grid-template-columns: 1fr 1fr; column-gap: calc(6mm * var(--d)); }
+.cv--rouge-presse .cv__main .entry > .entry__head, .cv--rouge-presse .cv__main .entry > .entry__sub { grid-column: 1; }
+.cv--rouge-presse .cv__main .entry > .entry__desc, .cv--rouge-presse .cv__main .entry > .entry__bullets { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
+.cv--rouge-presse .entry__head { flex-direction: column; align-items: flex-start; gap: calc(.3mm * var(--d)); }
+.cv--rouge-presse .entry h3 { font-weight: 700; }
+.cv--rouge-presse .entry__date { opacity: 1; font-weight: 700; color: var(--a); }
+.cv--rouge-presse .cv__main .levels, .cv--rouge-presse .cv__main .refs { grid-template-columns: 1fr 1fr; }
+
 /* ============ Printing: only the off-screen print copy, full-bleed A4 ============
    The engine paginates that copy into whole A4 pages before every print. */
 #printHost { position: fixed; left: -10000px; top: 0; width: 210mm; pointer-events: none; }

@@ -58,7 +58,7 @@ assert.match(await page.textContent('#docPreview .cv-sec--competences'), /Encais
 // 5. Matchbox picker changes the template of the live CV.
 await page.click('[data-goto="8"]');
 await page.waitForTimeout(600);
-assert.equal(await page.locator('.mbx__box').count(), 11);
+assert.equal(await page.locator('.mbx__box').count(), 16);
 await page.click('[data-mbx="1"]');
 await page.waitForTimeout(900);
 assert.equal(await page.locator('#docPreview .cv--corporate').count(), 1);

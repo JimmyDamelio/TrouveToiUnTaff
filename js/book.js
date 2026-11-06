@@ -437,7 +437,8 @@
      ========================================================= */
   const SLEEVES = {
     'minimal-pro': '#E9E4D8', corporate: '#1E3A5F', timeline: '#0F766E', 'modern-asymmetric': '#E2B13C', compact: '#5A6B7F',
-    'elegant-classic': '#B89A72', pastel: '#D8B9E6', 'bold-creative': '#C8553D', 'tech-futurist': '#14213A', 'dark-mode': '#2B2B31', ats: '#F1EEE6'
+    'elegant-classic': '#B89A72', pastel: '#D8B9E6', 'bold-creative': '#C8553D', 'tech-futurist': '#14213A', 'dark-mode': '#2B2B31', ats: '#F1EEE6',
+    'studio-bleu': '#1555C6', bulles: '#9DC9FA', pilule: '#BED8ED', bordeaux: '#5C010E', 'rouge-presse': '#AB0304'
   };
   const readable = hex => {
     const n = parseInt(hex.slice(1), 16);

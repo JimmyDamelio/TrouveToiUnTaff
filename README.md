@@ -13,7 +13,7 @@ Gratuit, sans compte, sans backend : tes données ne quittent jamais ton apparei
 4. **Le livre** : un chapitre par page, qui se tourne, chacun avec sa couleur. Page de gauche : le formulaire et son guide. Page de droite : le document en direct, avec ses sauts de page.
    - CV : photo (facultative, rappelée à la fin), identité, accroche, expériences, formation, compétences, langues, petits plus, modèle, finitions, téléchargement.
    - Lettre : coordonnées, destinataire, texte (brouillon écrit à partir du CV), modèle, téléchargement.
-5. **Le modèle** se choisit en ouvrant des boîtes d'allumettes (11 modèles).
+5. **Le modèle** se choisit en ouvrant des boîtes d'allumettes (16 modèles).
 6. **Mode expert** (`atelier.html`) : tout l'éditeur sur une seule page, pour les retouches fines.
 
 ## Aide à la rédaction
@@ -28,7 +28,7 @@ Gratuit, sans compte, sans backend : tes données ne quittent jamais ton apparei
 - Pagination réelle en pages A4 : aucun bloc n'est coupé, les pages suivantes ont leur marge, les fonds de modèle continuent sur chaque page
 - « Tout faire tenir sur 1 page » : resserre texte et espacements jusqu'à une taille encore lisible
 - PDF vectoriel via la fenêtre d'impression (« Enregistrer au format PDF »)
-- `tests/pdf.mjs` vérifie les 11 modèles en version courte, normale et longue, plus la lettre
+- `tests/pdf.mjs` vérifie les 16 modèles en version courte, normale et longue, plus la lettre
 
 ## Structure
 
@@ -37,7 +37,7 @@ index.html       le livre (parcours guidé)
 atelier.html     le mode expert
 css/app.css      styles communs et mode expert
 css/book.css     le livre, l'ouverture, les boîtes d'allumettes
-css/cv.css       les 11 modèles de CV, la lettre, l'impression
+css/cv.css       les 16 modèles de CV, la lettre, l'impression
 js/content.js    modèles, polices, phrases types, guides, exemple
 js/engine.js     moteur commun : données, rendu, pagination A4, conseils
 js/book.js       le livre
