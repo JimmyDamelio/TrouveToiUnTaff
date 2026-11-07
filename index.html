@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TrouveToiUnTaf · Ton CV et ta lettre de motivation, page après page</title>
 <meta name="description" content="Écris ton CV ou ta lettre de motivation comme un livre, chapitre après chapitre, avec des guides et des idées de phrases. 26 modèles, PDF A4 impeccable. Gratuit, sans compte, tes données restent dans ton navigateur.">
-<meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#161512" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f3ff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f0b26" media="(prefers-color-scheme: dark)">
 <meta property="og:title" content="TrouveToiUnTaf · CV et lettre de motivation gratuits">
 <meta property="og:description" content="Ton CV écrit page après page, avec des guides. PDF A4 impeccable, gratuit, 100 % privé.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f5f2ea'/><rect x='8' y='5' width='16' height='22' rx='1.5' fill='white' stroke='%231f3a93' stroke-width='1.6'/><path d='M11.5 11h9M11.5 15h9M11.5 19h6' stroke='%231f3a93' stroke-width='1.6' stroke-linecap='round'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%235b2eff'/><rect x='8' y='5' width='16' height='22' rx='1.5' fill='white' stroke='%23ff6b2c' stroke-width='1.6'/><path d='M11.5 11h9M11.5 15h9M11.5 19h6' stroke='%23ff6b2c' stroke-width='1.6' stroke-linecap='round'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600;700;800;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Permanent+Marker&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;1,700&family=Shrikhand&family=Poppins:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600;700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Permanent+Marker&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;1,700&family=Shrikhand&family=Poppins:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap">
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js" } }</script>
 <link rel="stylesheet" href="css/app.css">
 <link rel="stylesheet" href="css/book.css">
 <link rel="stylesheet" href="css/cv.css">
@@ -49,6 +50,7 @@
 </svg>
 
 <!-- ============ Welcome: the intro plays on this screen ============ -->
+<div class="scene" id="scene" aria-hidden="true"></div>
 <main class="screen" id="welcome" aria-labelledby="welcomeTitle">
   <div class="welcome">
     <div class="welcome__art" aria-hidden="true">
@@ -71,7 +73,7 @@
       <p class="welcome__brand" id="introBrand">TrouveToi<em>UnTaf</em></p>
       <h1 class="welcome__title" id="welcomeTitle" aria-label="Bienvenue."></h1>
       <p class="welcome__lead" id="introLead">On va écrire ton CV ensemble, page après page, avec un petit guide à chaque étape. Compte une quinzaine de minutes. C’est gratuit, et rien ne quitte ton appareil.</p>
-      <p class="welcome__q" id="introQ">Prêt(e) à décrocher ton prochain taf ?</p>
+      <p class="welcome__q" id="introQ">Prêt(e) à décrocher ton prochain <mark class="hl">taf</mark>&nbsp;?</p>
       <div class="welcome__actions" id="introActions">
         <button type="button" class="btn btn--primary btn--lg" data-go="yes">Oui, on y va</button>
         <button type="button" class="btn btn--lg" data-go="no">Pas encore</button>
@@ -141,8 +143,10 @@
   <p class="owner">© <span id="year">2026</span> TrouveToiUnTaf · Appartient à <strong>Edunos Studio</strong></p>
 </footer>
 
+<script src="vendor/gsap.min.js"></script>
 <script src="js/content.js"></script>
 <script src="js/engine.js"></script>
+<script src="js/scene.js"></script>
 <script src="js/book.js"></script>
 </body>
 </html>

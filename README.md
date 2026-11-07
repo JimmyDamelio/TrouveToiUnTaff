@@ -40,7 +40,9 @@ css/book.css     le livre, l'ouverture, les boîtes d'allumettes
 css/cv.css       les 26 modèles de CV, la lettre, l'impression
 js/content.js    modèles, polices, phrases types, guides, exemple
 js/engine.js     moteur commun : données, rendu, pagination A4, conseils
-js/book.js       le livre
+js/book.js       le livre (animations GSAP : titres, page qui se courbe, coches, confettis)
+js/scene.js      l'accueil 3D (Three.js, chargé à la demande ; feuille SVG si WebGL indisponible)
+vendor/gsap.min.js  GSAP 3.13, fourni avec le site (aucune dépendance réseau pour l'interface)
 js/app.js        le mode expert
 design/MASTER.md direction artistique
 tests/           book.mjs, smoke.mjs (mode expert), pdf.mjs
