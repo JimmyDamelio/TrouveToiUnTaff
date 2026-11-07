@@ -5,3 +5,6 @@ video/*/clips/
 video/*/vo/
 video/*/audio.wav
 video/*/*.mp4
+video/*/sounds/
+video/*/audio/
+video/*/audio_*.wav

@@ -38,7 +38,7 @@ function text(s, x, y, { size = 80, font = D, weight = 800, color = C.ink, align
 function width(s, size, font = D, weight = 800) { g.font = `${weight} ${size}px "${font}"`; return g.measureText(s).width; }
 
 // Headline: words rise one by one; parts wrapped in *…* sit on a yellow highlight.
-function headline(lines, t0, t, { y = 250, size = 92, lh = 1.05, align = 'center', color = C.ink, out = Infinity } = {}) {
+function headline(lines, t0, t, { y = 250, size = 92, lh = 1.05, align = 'center', color = C.ink, out = 1e9 } = {}) {
   const fade = 1 - prog(t, out, out + .2);
   if (t < t0 || fade <= 0) return;
   let k = 0;
@@ -60,7 +60,7 @@ function headline(lines, t0, t, { y = 250, size = 92, lh = 1.05, align = 'center
     });
   });
 }
-function chip(s, x, y, t0, t, { bg = C.ink, fg = '#fff', size = 46, rot = -.05, out = Infinity } = {}) {
+function chip(s, x, y, t0, t, { bg = C.ink, fg = '#fff', size = 46, rot = -.05, out = 1e9 } = {}) {
   const p = outBack(prog(t, t0, t0 + .35)) * (1 - prog(t, out, out + .2));
   if (p <= 0) return;
   const w = width(s, size, U, 700) + size * 1.1, h = size * 1.75;
@@ -97,33 +97,14 @@ function background(t, hue) {
   glow(120 + Math.cos(t * .6) * 60, 1750, 800, C.orange);
 }
 
-// Burned subtitles of the voice-over (sound-off viewers).
-const SUBS = [
-  [0.25, 2.1, 'Ton CV est fini…'], [2.1, 4.0, 'et là, on te demande de payer ?!'],
-  [4.2, 5.5, 'Stop.'], [5.5, 6.85, 'Ici, c’est gratuit. Vraiment.'],
-  [7.15, 9.45, 'Tu écris ton CV comme un livre,'], [9.45, 11.85, 'avec un guide à chaque étape.'],
-  [12.05, 13.8, 'Tu choisis parmi 26 modèles,'], [13.9, 16.95, 'et tu télécharges ton PDF A4.'],
-  [17.3, 19.0, 'Sans compte, tes infos restent'], [19.0, 20.7, 'sur ton téléphone. Lien en bio !']
-];
-function subtitles(t) {
-  const s = SUBS.find(([a, b]) => t >= a && t < b);
-  if (!s) return;
-  const p = outCubic(prog(t, s[0], s[0] + .12)), size = 44, w = width(s[2], size, U, 700) + 56;
-  withAlpha(p, () => {
-    g.fillStyle = 'rgba(23,18,59,.86)'; rr(W / 2 - w / 2, 1478 + (1 - p) * 10, w, 76, 22); g.fill();
-    text(s[2], W / 2, 1517 + (1 - p) * 10, { size, font: U, weight: 700, color: '#fff', align: 'center', base: 'middle' });
-  });
-}
-
 // ---------- scenes ----------
-function sceneHook(t) { // 0 – 4.2: the paywall every job seeker knows
+function sceneHook(t) { // 0 – 2.5: the paywall every job seeker knows, stamped GRATUIT
   background(t, C.violet);
   const enter = outCubic(prog(t, 0, .5));
   phone(A.cvs[9], W / 2, 520 + (1 - enter) * 300, { scale: .78, rot: -.03 * (1 - enter) });
-  headline(['Ton CV est *fini…*'], .15, t, { y: 300, out: 1.95 });
-  headline(['…et là, faut', '*payer* ?!'], 2.05, t, { y: 250, size: 100 });
+  headline(['*Fini* de payer', 'pour un CV pro.'], .05, t, { y: 230, size: 104 });
   // Generic paywall (no real brand): pops at 2.1, shakes, then the stamp hits.
-  const p = outBack(prog(t, 2.1, 2.45)), shake = t > 3 ? Math.sin(t * 60) * 6 * (1 - prog(t, 3, 3.6)) : 0;
+  const p = outBack(prog(t, .4, .72)), shake = t > 1.15 ? Math.sin(t * 60) * 6 * (1 - prog(t, 1.15, 1.7)) : 0;
   if (p > 0) withAlpha(clamp(p * 2), () => {
     g.save(); g.translate(W / 2 + shake, 1120); g.scale(p, p);
     g.shadowColor = 'rgba(0,0,0,.3)'; g.shadowBlur = 60; g.shadowOffsetY = 20;
@@ -136,23 +117,24 @@ function sceneHook(t) { // 0 – 4.2: the paywall every job seeker knows
     g.restore();
   });
 }
-function stamp(t) { // 4.2: STOP slams over the paywall
-  const p = prog(t, 4.2, 4.42);
-  if (p <= 0 || t > 4.75) return;
-  const s = mix(2.6, 1, outCubic(p)), a = 1 - prog(t, 4.6, 4.75);
+function stamp(t) { // 1.85: GRATUIT slams over the paywall
+  const p = prog(t, 1.85, 2.05);
+  if (p <= 0 || t > 2.55) return;
+  const s = mix(2.6, 1, outCubic(p)), a = 1 - prog(t, 2.4, 2.55);
   withAlpha(a, () => {
     g.save(); g.translate(W / 2, 1000); g.rotate(-.14); g.scale(s, s);
-    g.fillStyle = C.orange; rr(-300, -120, 600, 240, 30); g.fill();
-    text('STOP', 0, 8, { size: 190, color: C.ink, align: 'center', base: 'middle' });
+    g.fillStyle = C.orange; rr(-370, -110, 740, 220, 30); g.fill();
+    text('GRATUIT', 0, 8, { size: 150, color: C.ink, align: 'center', base: 'middle' });
     g.restore();
   });
 }
-function sceneSite(t) { // 4.6 – 7.05: the real welcome screen
+function sceneSite(t) { // 2.5 – 7.05: the real welcome screen
   background(t, C.violet);
-  const p = outCubic(prog(t, 4.55, 5.0));
-  phone(frame(A.welcome, t, 4.55, 6), W / 2, 470 + (1 - p) * 900, { scale: .82, rot: (1 - p) * .2 });
-  headline(['Trouve-toi', 'un *taf*'], 4.65, t, { y: 210, size: 104 });
-  chip('100 % gratuit. Vraiment.', 540, 1380, 5.6, t, { bg: C.orange, fg: C.ink, rot: .06 });
+  const p = outCubic(prog(t, 2.5, 2.95));
+  phone(frame(A.welcome, t, 2.5, 6), W / 2, 470 + (1 - p) * 900, { scale: .82, rot: (1 - p) * .2 });
+  headline(['Trouve-toi', 'un *taf*'], 2.6, t, { y: 210, size: 104 });
+  chip('100 % gratuit. Vraiment.', 540, 1380, 3.9, t, { bg: C.orange, fg: C.ink, rot: .06, out: 5.25 });
+  chip('Sans compte', 540, 1380, 5.45, t, { bg: C.violet, rot: -.05 });
 }
 function sceneWrite(t) { // 7.05 – 11.95: typing, checks, the page curls
   background(t, C.violet);
@@ -228,15 +210,14 @@ function whip(t, at, col) {
 
 function renderAt(t) {
   g.save(); g.clearRect(0, 0, W, H);
-  if (t < 4.55) sceneHook(t);
+  if (t < 2.5) sceneHook(t);
   else if (t < 7.05) sceneSite(t);
   else if (t < 11.95) sceneWrite(t);
   else if (t < 13.85) sceneModels(t);
   else if (t < 17.2) sceneFin(t);
   else sceneEnd(t);
   stamp(t);
-  whip(t, 7.05, C.orange); whip(t, 11.95, C.violet); whip(t, 13.85, C.pink); whip(t, 17.2, C.sun);
-  subtitles(t);
+  whip(t, 2.5, C.violet); whip(t, 7.05, C.orange); whip(t, 11.95, C.violet); whip(t, 13.85, C.pink); whip(t, 17.2, C.sun);
   g.restore();
 }
 window.renderAt = renderAt; window.DUR = DUR;
