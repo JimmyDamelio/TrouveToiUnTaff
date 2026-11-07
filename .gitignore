@@ -1,1 +1,7 @@
 __pycache__/
+video/*/frames/
+video/*/stills/
+video/*/clips/
+video/*/vo/
+video/*/audio.wav
+video/*/*.mp4

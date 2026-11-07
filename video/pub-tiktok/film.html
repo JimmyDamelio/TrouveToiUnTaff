@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,500;9..40,700&display=swap">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// TikTok ad, 9:16, 21.5 s. renderAt(t) draws any moment; everything is a pure function of t.
+// Safe zone (TikTok UI): text stays within x 60..940, y 150..1560.
+const W = 1080, H = 1920, DUR = 21.5;
+const c = document.getElementById('c'), g = c.getContext('2d');
+const C = { lilac: '#f6f3ff', ink: '#17123b', violet: '#5b2eff', orange: '#ff6b2c', sun: '#ffd23f', mint: '#1fc59a', pink: '#ff4f9a', teal: '#00a6b8' };
+const D = 'Bricolage Grotesque', U = 'DM Sans';
+
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const outCubic = x => 1 - (1 - x) ** 3;
+const inOut = x => (x < .5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2);
+const outBack = x => { const k = 1.7; return 1 + (k + 1) * (x - 1) ** 3 + k * (x - 1) ** 2; };
+const mix = (a, b, k) => a + (b - a) * k;
+
+// ---------- assets ----------
+const load = src => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => no(src); i.src = src; });
+const seq = (name, n) => Promise.all(Array.from({ length: n }, (_, k) => load(`clips/${name}/f_${String(k).padStart(3, '0')}.jpg`)));
+const TPL = ['studio-bleu', 'bordeaux', 'timeline', 'bold-creative', 'lavande', 'marine-or', 'pastel', 'tech-futurist', 'polaroid', 'corporate'];
+const A = {};
+window.ready = (async () => {
+  [A.welcome, A.write, A.fin, A.cvs] = await Promise.all([seq('welcome', 120), seq('write', 120), seq('fin', 75), Promise.all(TPL.map(id => load(`clips/cvs/${id}.png`)))]);
+  await Promise.all([`800 100px "${D}"`, `700 100px "${D}"`, `500 40px "${U}"`, `700 40px "${U}"`].map(f => document.fonts.load(f, 'Ééàç€')));
+})();
+
+// ---------- drawing helpers (all respect the current globalAlpha) ----------
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function withAlpha(a, fn) { g.save(); g.globalAlpha *= clamp(a); fn(); g.restore(); }
+function text(s, x, y, { size = 80, font = D, weight = 800, color = C.ink, align = 'left', base = 'alphabetic' } = {}) {
+  g.font = `${weight} ${size}px "${font}"`; g.fillStyle = color; g.textAlign = align; g.textBaseline = base;
+  g.fillText(s, x, y); return g.measureText(s).width;
+}
+function width(s, size, font = D, weight = 800) { g.font = `${weight} ${size}px "${font}"`; return g.measureText(s).width; }
+
+// Headline: words rise one by one; parts wrapped in *…* sit on a yellow highlight.
+function headline(lines, t0, t, { y = 250, size = 92, lh = 1.05, align = 'center', color = C.ink, out = Infinity } = {}) {
+  const fade = 1 - prog(t, out, out + .2);
+  if (t < t0 || fade <= 0) return;
+  let k = 0;
+  lines.forEach((line, li) => {
+    const words = line.split(' ');
+    const total = words.reduce((s, w) => s + width(w.replace(/\*/g, ''), size) + size * .26, -size * .26);
+    let x = align === 'center' ? W / 2 - total / 2 : 70;
+    const yy = y + li * size * lh;
+    words.forEach(w => {
+      const hl = w.startsWith('*'), clean = w.replace(/\*/g, ''), ww = width(clean, size);
+      const p = outBack(prog(t, t0 + k * .06, t0 + k * .06 + .38));
+      withAlpha(clamp(p * 1.4) * fade, () => {
+        g.save(); g.translate(x + ww / 2, yy + (1 - p) * 50); g.rotate((1 - p) * .12);
+        if (hl) { const s = clamp((t - t0 - k * .06 - .2) / .3); g.fillStyle = C.sun; g.save(); g.transform(1, 0, -.14, 1, 0, 0); rr(-ww / 2 - 12, -size * .78, (ww + 24) * outCubic(s), size * .98, 14); g.fill(); g.restore(); }
+        text(clean, -ww / 2, 0, { size, color });
+        g.restore();
+      });
+      x += ww + size * .26; k++;
+    });
+  });
+}
+function chip(s, x, y, t0, t, { bg = C.ink, fg = '#fff', size = 46, rot = -.05, out = Infinity } = {}) {
+  const p = outBack(prog(t, t0, t0 + .35)) * (1 - prog(t, out, out + .2));
+  if (p <= 0) return;
+  const w = width(s, size, U, 700) + size * 1.1, h = size * 1.75;
+  withAlpha(clamp(p * 2), () => {
+    g.save(); g.translate(x, y); g.rotate(rot); g.scale(p, p);
+    g.shadowColor = 'rgba(23,18,59,.25)'; g.shadowBlur = 30; g.shadowOffsetY = 12;
+    g.fillStyle = bg; rr(-w / 2, -h / 2, w, h, h / 2); g.fill(); g.shadowColor = 'transparent';
+    text(s, 0, 2, { size, font: U, weight: 700, color: fg, align: 'center', base: 'middle' });
+    g.restore();
+  });
+}
+// Phone with a real capture of the site on its screen.
+const PH = { w: 640, sw: 600, sh: 1300 };
+function phone(img, cx, top, { scale = 1, rot = 0, a = 1 } = {}) {
+  withAlpha(a, () => {
+    g.save(); g.translate(cx, top + PH.sh / 2 * scale); g.rotate(rot); g.scale(scale, scale);
+    const fw = PH.sw + 36, fh = PH.sh + 36;
+    g.shadowColor = 'rgba(64,30,170,.45)'; g.shadowBlur = 80; g.shadowOffsetY = 40;
+    g.fillStyle = C.ink; rr(-fw / 2, -fh / 2, fw, fh, 74); g.fill(); g.shadowColor = 'transparent';
+    g.save(); rr(-PH.sw / 2, -PH.sh / 2, PH.sw, PH.sh, 58); g.clip();
+    if (img) g.drawImage(img, -PH.sw / 2, -PH.sh / 2, PH.sw, PH.sh); else { g.fillStyle = '#fff'; g.fillRect(-PH.sw / 2, -PH.sh / 2, PH.sw, PH.sh); }
+    g.restore();
+    g.fillStyle = C.ink; rr(-70, -PH.sh / 2 + 14, 140, 34, 17); g.fill(); // camera island
+    g.restore();
+  });
+}
+const frame = (list, t, t0, from = 0) => list[clamp(Math.floor((t - t0) * 30) + from, 0, list.length - 1)];
+
+// Background: lilac with two drifting colour glows; the glow colour follows the scene.
+function background(t, hue) {
+  g.fillStyle = C.lilac; g.fillRect(0, 0, W, H);
+  const glow = (x, y, r, col) => { const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, col + 'aa'); gr.addColorStop(1, col + '00'); g.fillStyle = gr; g.fillRect(0, 0, W, H); };
+  glow(900 + Math.sin(t * .7) * 80, 200 + Math.cos(t * .5) * 60, 900, hue);
+  glow(120 + Math.cos(t * .6) * 60, 1750, 800, C.orange);
+}
+
+// Burned subtitles of the voice-over (sound-off viewers).
+const SUBS = [
+  [0.25, 2.1, 'Ton CV est fini…'], [2.1, 4.0, 'et là, on te demande de payer ?!'],
+  [4.2, 5.5, 'Stop.'], [5.5, 6.85, 'Ici, c’est gratuit. Vraiment.'],
+  [7.15, 9.45, 'Tu écris ton CV comme un livre,'], [9.45, 11.85, 'avec un guide à chaque étape.'],
+  [12.05, 13.8, 'Tu choisis parmi 26 modèles,'], [13.9, 16.95, 'et tu télécharges ton PDF A4.'],
+  [17.3, 19.0, 'Sans compte, tes infos restent'], [19.0, 20.7, 'sur ton téléphone. Lien en bio !']
+];
+function subtitles(t) {
+  const s = SUBS.find(([a, b]) => t >= a && t < b);
+  if (!s) return;
+  const p = outCubic(prog(t, s[0], s[0] + .12)), size = 44, w = width(s[2], size, U, 700) + 56;
+  withAlpha(p, () => {
+    g.fillStyle = 'rgba(23,18,59,.86)'; rr(W / 2 - w / 2, 1478 + (1 - p) * 10, w, 76, 22); g.fill();
+    text(s[2], W / 2, 1517 + (1 - p) * 10, { size, font: U, weight: 700, color: '#fff', align: 'center', base: 'middle' });
+  });
+}
+
+// ---------- scenes ----------
+function sceneHook(t) { // 0 – 4.2: the paywall every job seeker knows
+  background(t, C.violet);
+  const enter = outCubic(prog(t, 0, .5));
+  phone(A.cvs[9], W / 2, 520 + (1 - enter) * 300, { scale: .78, rot: -.03 * (1 - enter) });
+  headline(['Ton CV est *fini…*'], .15, t, { y: 300, out: 1.95 });
+  headline(['…et là, faut', '*payer* ?!'], 2.05, t, { y: 250, size: 100 });
+  // Generic paywall (no real brand): pops at 2.1, shakes, then the stamp hits.
+  const p = outBack(prog(t, 2.1, 2.45)), shake = t > 3 ? Math.sin(t * 60) * 6 * (1 - prog(t, 3, 3.6)) : 0;
+  if (p > 0) withAlpha(clamp(p * 2), () => {
+    g.save(); g.translate(W / 2 + shake, 1120); g.scale(p, p);
+    g.shadowColor = 'rgba(0,0,0,.3)'; g.shadowBlur = 60; g.shadowOffsetY = 20;
+    g.fillStyle = '#fff'; rr(-300, -190, 600, 380, 34); g.fill(); g.shadowColor = 'transparent';
+    text('Télécharger ton CV', 0, -105, { size: 40, font: U, weight: 700, align: 'center' });
+    text('Paiement requis', 0, -48, { size: 32, font: U, weight: 500, color: '#6b6690', align: 'center' });
+    text('2,90 €', 0, 40, { size: 84, align: 'center', color: '#c62a1d' });
+    g.fillStyle = '#c62a1d'; rr(-220, 85, 440, 74, 37); g.fill();
+    text('Payer et télécharger', 0, 124, { size: 32, font: U, weight: 700, color: '#fff', align: 'center', base: 'middle' });
+    g.restore();
+  });
+}
+function stamp(t) { // 4.2: STOP slams over the paywall
+  const p = prog(t, 4.2, 4.42);
+  if (p <= 0 || t > 4.75) return;
+  const s = mix(2.6, 1, outCubic(p)), a = 1 - prog(t, 4.6, 4.75);
+  withAlpha(a, () => {
+    g.save(); g.translate(W / 2, 1000); g.rotate(-.14); g.scale(s, s);
+    g.fillStyle = C.orange; rr(-300, -120, 600, 240, 30); g.fill();
+    text('STOP', 0, 8, { size: 190, color: C.ink, align: 'center', base: 'middle' });
+    g.restore();
+  });
+}
+function sceneSite(t) { // 4.6 – 7.05: the real welcome screen
+  background(t, C.violet);
+  const p = outCubic(prog(t, 4.55, 5.0));
+  phone(frame(A.welcome, t, 4.55, 6), W / 2, 470 + (1 - p) * 900, { scale: .82, rot: (1 - p) * .2 });
+  headline(['Trouve-toi', 'un *taf*'], 4.65, t, { y: 210, size: 104 });
+  chip('100 % gratuit. Vraiment.', 540, 1380, 5.6, t, { bg: C.orange, fg: C.ink, rot: .06 });
+}
+function sceneWrite(t) { // 7.05 – 11.95: typing, checks, the page curls
+  background(t, C.violet);
+  const p = outCubic(prog(t, 7.0, 7.4)), z = mix(.82, .86, prog(t, 7, 12));
+  phone(frame(A.write, t, 7.05, 0), W / 2, 470 - (z - .82) * 600 + (1 - p) * 120, { scale: z, a: clamp(p * 2) });
+  headline(['Écris ton CV', 'comme un *livre*'], 7.1, t, { y: 210, size: 96 });
+  chip('Un guide à chaque étape', 540, 1380, 9.45, t, { bg: C.violet, rot: -.06 });
+}
+function sceneModels(t) { // 11.95 – 13.85: the same CV in ten templates
+  background(t, C.pink);
+  const n = A.cvs.length, d = 1.8 / n;
+  const i = clamp(Math.floor((t - 11.95) / d), 0, n - 1);
+  for (let k = Math.max(0, i - 2); k <= i; k++) {
+    const img = A.cvs[k], age = (t - 11.95 - k * d) / d, p = outCubic(clamp(age * 1.6));
+    const w = 700, h = Math.min(img.height / img.width * w, w * 297 / 210);
+    const back = i - k;
+    withAlpha(back === 2 ? .5 : 1, () => {
+      g.save(); g.translate(W / 2 + (1 - p) * 700 - back * 30, 950 - back * 26); g.rotate((k % 2 ? .05 : -.05) + (1 - p) * .3); g.scale(1 - back * .06, 1 - back * .06);
+      g.shadowColor = 'rgba(64,30,170,.4)'; g.shadowBlur = 60; g.shadowOffsetY = 30;
+      g.fillStyle = '#fff'; g.fillRect(-w / 2, -h / 2, w, h); g.shadowColor = 'transparent';
+      g.drawImage(img, 0, 0, img.width, img.width * h / w, -w / 2, -h / 2, w, h);
+      g.restore();
+    });
+  }
+  const count = Math.round(mix(1, 26, outCubic(prog(t, 12.0, 13.5))));
+  headline([`${count} modèles`], 12.0, t, { y: 250, size: 120 });
+}
+function sceneFin(t) { // 13.85 – 17.2: the real last chapter, confetti
+  background(t, C.violet);
+  const p = outCubic(prog(t, 13.85, 14.25));
+  phone(frame(A.fin, t, 13.95, 0), W / 2, 470 + (1 - p) * 900, { scale: .82, rot: (1 - p) * -.15 });
+  headline(['Ton *PDF* A4,', 'prêt à envoyer'], 13.95, t, { y: 210, size: 96 });
+  chip('0 €', 820, 560, 15.0, t, { bg: C.mint, fg: C.ink, size: 70, rot: .12 });
+}
+function sceneEnd(t) { // 17.2 – 21.5: call to action
+  g.fillStyle = C.violet; g.fillRect(0, 0, W, H);
+  const glow = (x, y, r, col) => { const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, col + 'cc'); gr.addColorStop(1, col + '00'); g.fillStyle = gr; g.fillRect(0, 0, W, H); };
+  glow(950, 250 + Math.sin(t) * 60, 800, C.pink); glow(100, 1700, 900, C.orange);
+  const p = outBack(prog(t, 17.25, 17.7));
+  withAlpha(clamp(p * 2), () => {
+    g.save(); g.translate(W / 2, 470); g.scale(p, p);
+    text('TrouveToi', 0, 0, { size: 120, color: '#fff', align: 'right' });
+    text('UnTaf', 0, 0, { size: 120, color: C.sun, align: 'left' });
+    g.restore();
+  });
+  ['Gratuit', 'Sans compte', 'Tes infos restent chez toi'].forEach((s, k) => {
+    const q = outBack(prog(t, 17.7 + k * .35, 18.05 + k * .35));
+    withAlpha(clamp(q * 2), () => {
+      const y = 720 + k * 120, x = 200 + (1 - q) * -60;
+      g.fillStyle = C.mint; g.beginPath(); g.arc(x, y - 18, 34, 0, 7); g.fill();
+      g.strokeStyle = C.ink; g.lineWidth = 9; g.lineCap = g.lineJoin = 'round';
+      g.beginPath(); g.moveTo(x - 15, y - 18); g.lineTo(x - 4, y - 6); g.lineTo(x + 16, y - 30); g.stroke();
+      text(s, x + 64, y, { size: 58, font: U, weight: 700, color: '#fff' });
+    });
+  });
+  const b = outBack(prog(t, 19.0, 19.4)), pulse = 1 + Math.sin((t - 19.4) * 7) * .03 * (t > 19.4);
+  withAlpha(clamp(b * 2), () => {
+    g.save(); g.translate(W / 2, 1230); g.scale(b * pulse, b * pulse);
+    g.shadowColor = 'rgba(0,0,0,.3)'; g.shadowBlur = 50; g.shadowOffsetY = 20;
+    g.fillStyle = C.orange; rr(-330, -85, 660, 170, 85); g.fill(); g.shadowColor = 'transparent';
+    text('Lien en bio', 0, 6, { size: 84, color: C.ink, align: 'center', base: 'middle' });
+    g.restore();
+  });
+}
+
+// Whip transition: a diagonal colour band sweeps across between scenes.
+function whip(t, at, col) {
+  const p = prog(t, at - .18, at + .18);
+  if (p <= 0 || p >= 1) return;
+  const x = mix(-1400, 1400, inOut(p));
+  g.save(); g.translate(W / 2 + x, H / 2); g.rotate(-.35); g.fillStyle = col; g.fillRect(-500, -1600, 1000, 3200); g.restore();
+}
+
+function renderAt(t) {
+  g.save(); g.clearRect(0, 0, W, H);
+  if (t < 4.55) sceneHook(t);
+  else if (t < 7.05) sceneSite(t);
+  else if (t < 11.95) sceneWrite(t);
+  else if (t < 13.85) sceneModels(t);
+  else if (t < 17.2) sceneFin(t);
+  else sceneEnd(t);
+  stamp(t);
+  whip(t, 7.05, C.orange); whip(t, 11.95, C.violet); whip(t, 13.85, C.pink); whip(t, 17.2, C.sun);
+  subtitles(t);
+  g.restore();
+}
+window.renderAt = renderAt; window.DUR = DUR;
+</script></body></html>
