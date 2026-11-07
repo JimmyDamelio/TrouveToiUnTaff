@@ -75,7 +75,7 @@
   T.setPrintSource(() => (isLetter() ? renderLetter(data, settings) : renderCv(data, settings)));
 
   const CHECKS = [
-    d => d.fullName.trim(), d => d.jobTitle.trim(), d => d.email.trim() || d.phone.trim(), d => d.profil.trim(),
+    d => d.fullName.trim(), d => d.jobTitle.trim() || d.cible === 'polyvalent', d => d.email.trim() || d.phone.trim(), d => d.profil.trim(),
     d => d.experiences.some(isFilled) || d.projets.some(isFilled), d => d.formations.some(isFilled),
     d => d.competences.some(isFilled), d => d.langues.some(isFilled)
   ];
@@ -133,9 +133,10 @@
 
   const phNote = '<p class="ph-note">Remplace les passages entre crochets, comme <code>[X]</code>, par tes vraies informations.</p>';
   function profilAssist() {
-    const dom = DOMAINS[settings.domain];
-    return `<details class="assist" id="assist-profil"><summary>${icon('pen')}Idées de profil · ${esc(dom.name)}</summary>
-      <div class="assist__body"><div class="suggest">${dom.profils.map(p =>
+    const dom = DOMAINS[settings.domain], poly = data.cible === 'polyvalent';
+    const ideas = poly ? [...window.TTU_CONTENT.POLY_PROFILS, ...dom.profils] : dom.profils;
+    return `<details class="assist" id="assist-profil"><summary>${icon('pen')}Idées de profil · ${poly ? 'CV polyvalent' : esc(dom.name)}</summary>
+      <div class="assist__body"><div class="suggest">${ideas.map(p =>
         `<button type="button" data-insert="f-profil" data-mode="replace" data-text="${esc(p)}">${esc(p)}</button>`).join('')}</div>${phNote}</div></details>`;
   }
   const CARDS = [
@@ -149,9 +150,16 @@
           <p class="help">Facultative. Elle est redimensionnée et ne quitte jamais ton appareil.</p>
         </div>
       </div>
+      <div class="row"><span class="label" id="lbl-cible">Ton CV vise</span>
+        <div class="segmented" role="group" aria-labelledby="lbl-cible">
+          <button type="button" data-cible="poste" aria-pressed="${data.cible !== 'polyvalent'}">Un poste précis</button>
+          <button type="button" data-cible="polyvalent" aria-pressed="${data.cible === 'polyvalent'}">Plusieurs postes</button>
+        </div></div>
       <div class="grid-2">
         ${field('fullName', 'Prénom et nom', { ph: 'Sophie Martin', auto: 'name' })}
-        ${field('jobTitle', 'Titre professionnel', { ph: 'Vendeuse conseil', auto: 'organization-title' })}
+        ${data.cible === 'polyvalent'
+          ? field('jobTitle', 'Domaines (facultatif)', { ph: 'Vente · Accueil · Logistique', help: 'Laisse vide si tu préfères.' })
+          : field('jobTitle', 'Titre professionnel', { ph: 'Vendeuse conseil', auto: 'organization-title' })}
         ${field('email', 'Email', { type: 'email', ph: 'prenom.nom@email.fr', auto: 'email' })}
         ${field('phone', 'Téléphone', { type: 'tel', ph: '06 12 34 56 78', auto: 'tel' })}
         ${field('address', 'Ville', { ph: 'Lyon', auto: 'address-level2' })}
@@ -352,7 +360,7 @@
     const L = data.letter;
     if (L.corps.trim() && !confirm('Remplacer le texte actuel de ta lettre par un brouillon ?')) return;
     L.corps = T.buildDraft(data);
-    if (!L.poste.trim() && data.jobTitle.trim()) L.poste = data.jobTitle.trim();
+    if (!L.poste.trim() && data.cible !== 'polyvalent' && data.jobTitle.trim()) L.poste = data.jobTitle.trim();
     fillFields();
     changed();
     toast('Brouillon prêt : complète les passages entre crochets');
@@ -467,6 +475,11 @@
     } else if (ds.secMove) moveSection(el);
     else if (ds.action) listAction(el);
     else if (ds.add) addSuggestion(el);
+    else if (ds.cible) {
+      data.cible = ds.cible;
+      renderContentPanel(); fillFields(); changed();
+      $(`[data-cible="${ds.cible}"]`).focus();
+    }
     else if (ds.insert) { const target = document.getElementById(ds.insert); if (target) T.insertText(target, ds.text, ds.mode); }
     else if (el.id === 'tipsBtn') jumpToTips();
     else if (el.id === 'photoRemove') { data.photo = ''; renderPhoto(); changed(); $('#photoInput').focus(); }

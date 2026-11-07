@@ -157,10 +157,12 @@
   const domainSelect = () => `<div class="field"><label for="domain">Ton domaine</label><select id="domain">${Object.entries(DOMAINS).map(([k, v]) =>
     `<option value="${k}"${k === settings.domain ? ' selected' : ''}>${esc(v.name)}</option>`).join('')}</select>
     <span class="help">Il sert à te proposer des phrases, des missions et des compétences adaptées.</span></div>`;
+  const isPoly = () => data.cible === 'polyvalent';
   const profilIdeas = () => {
     const dom = DOMAINS[settings.domain];
-    return `<details class="assist" id="assist-profil" open><summary>${icon('pen')}Idées d’accroche · ${esc(dom.name)}</summary>
-      <div class="assist__body"><div class="suggest">${dom.profils.map(p =>
+    const ideas = isPoly() ? [...C.POLY_PROFILS, ...dom.profils] : dom.profils;
+    return `<details class="assist" id="assist-profil" open><summary>${icon('pen')}Idées d’accroche · ${isPoly() ? 'CV polyvalent' : esc(dom.name)}</summary>
+      <div class="assist__body"><div class="suggest">${ideas.map(p =>
         `<button type="button" data-insert="f-profil" data-mode="replace" data-text="${esc(p)}">${esc(p)}</button>`).join('')}</div>
       <p class="ph-note">Remplace les passages entre crochets, comme <code>[X]</code>, par tes vraies informations.</p></div></details>`;
   };
@@ -187,16 +189,23 @@
 
   const BODY = {
     photo: () => photoBlock(),
-    identite: () => `<div class="grid-2">
+    identite: () => `<div class="finish-row"><span class="label" id="lbl-cible">Ton CV vise…</span>
+        <div class="segmented" role="group" aria-labelledby="lbl-cible">
+          <button type="button" data-cible="poste" aria-pressed="${!isPoly()}">Un poste précis</button>
+          <button type="button" data-cible="polyvalent" aria-pressed="${isPoly()}">Plusieurs postes (CV polyvalent)</button>
+        </div></div>
+      <div class="grid-2">
       ${field('fullName', 'Prénom et nom', { ph: 'Sophie Martin', auto: 'name' })}
-      ${field('jobTitle', 'Le poste que tu vises', { ph: 'Vendeuse conseil', auto: 'organization-title' })}
+      ${isPoly()
+        ? field('jobTitle', 'Tes domaines (facultatif)', { ph: 'Vente · Accueil · Logistique', help: 'Laisse vide si tu préfères : ton CV reste impeccable sans titre.' })
+        : field('jobTitle', 'Le poste que tu vises', { ph: 'Vendeuse conseil', auto: 'organization-title' })}
       ${field('email', 'Email', { type: 'email', ph: 'prenom.nom@email.fr', auto: 'email' })}
       ${field('phone', 'Téléphone', { type: 'tel', ph: '06 12 34 56 78', auto: 'tel' })}
       ${field('address', 'Ville', { ph: 'Lyon', auto: 'address-level2' })}
       ${field('website', 'LinkedIn ou site (facultatif)', { ph: 'linkedin.com/in/…', auto: 'url' })}
       </div>${domainSelect()}`,
     accroche: () => field('profil', 'Ton accroche', { type: 'textarea', rows: 5, ph: 'Qui tu es, ce que tu apportes, ce que tu cherches.' })
-      + profilIdeas() + field('objectif', 'Ton objectif (facultatif)', { type: 'textarea', rows: 2, ph: 'Le poste ou le contrat visé, et à partir de quand.' }),
+      + profilIdeas() + field('objectif', 'Ton objectif (facultatif)', { type: 'textarea', rows: 2, ph: isPoly() ? 'Les types de postes que tu vises (vente, accueil…), et à partir de quand.' : 'Le poste ou le contrat visé, et à partir de quand.' }),
     experiences: () => listBlock('experiences'),
     formations: () => listBlock('formations'),
     competences: () => listBlock('competences'),
@@ -222,19 +231,19 @@
     fin: () => finBody(),
     toi: () => `<div class="grid-2">
       ${field('fullName', 'Prénom et nom', { ph: 'Sophie Martin', auto: 'name' })}
-      ${field('jobTitle', 'Ton titre professionnel', { ph: 'Vendeuse conseil', auto: 'organization-title' })}
+      ${field('jobTitle', 'Ton titre professionnel (facultatif)', { ph: 'Vendeuse conseil', auto: 'organization-title' })}
       ${field('email', 'Email', { type: 'email', ph: 'prenom.nom@email.fr', auto: 'email' })}
       ${field('phone', 'Téléphone', { type: 'tel', ph: '06 12 34 56 78', auto: 'tel' })}
       ${field('address', 'Ville', { ph: 'Lyon', auto: 'address-level2' })}
       </div>`,
     destinataire: () => `<div class="grid-2">
-      ${letterField('poste', 'Poste visé', { ph: 'Vendeur conseil' })}
+      ${letterField('poste', 'Poste visé (facultatif)', { ph: 'Vendeur conseil', help: 'Laisse vide pour une candidature spontanée.' })}
       ${letterField('entreprise', 'Entreprise', { ph: 'Décathlon' })}
       ${letterField('contact', 'Destinataire', { ph: 'Mme Dupont, Responsable RH' })}
       ${letterField('lieu', 'Ta ville', { ph: 'Lille' })}
       ${letterField('adresse', 'Adresse de l’entreprise', { type: 'textarea', rows: 2, ph: '4 boulevard de Mons\n59650 Villeneuve-d’Ascq', wide: true })}
       ${letterField('date', 'Date', { ph: today(), help: 'Laisse vide pour la date du jour.' })}
-      ${letterField('objet', 'Objet', { ph: 'Candidature au poste de …', help: 'Laisse vide : on le remplit avec le poste visé.' })}
+      ${letterField('objet', 'Objet', { ph: 'Candidature au poste de …', help: 'Laisse vide : on le remplit avec le poste visé, ou « Candidature spontanée ».' })}
       </div>`,
     texte: () => `<div class="row"><span class="help">Le brouillon reprend ton poste, ta dernière expérience et tes compétences clés.</span>
         <button type="button" class="btn btn--sm btn--ch" data-cmd="draft">${icon('pen')}Écrire un brouillon pour moi</button></div>
@@ -612,7 +621,7 @@
     draft: () => {
       if (data.letter.corps.trim() && !confirm('Remplacer le texte actuel de ta lettre par un brouillon ?')) return;
       data.letter.corps = T.buildDraft(data);
-      if (!data.letter.poste.trim() && data.jobTitle.trim()) data.letter.poste = data.jobTitle.trim();
+      if (!data.letter.poste.trim() && !isPoly() && data.jobTitle.trim()) data.letter.poste = data.jobTitle.trim();
       const el = $('#l-corps'); if (el) el.value = data.letter.corps;
       changed();
       toast('Brouillon prêt : complète les passages entre crochets');
@@ -640,6 +649,13 @@
     else if (ds.goto) goTo(+ds.goto);
     else if (ds.chapter) goTo(chapters().findIndex(c => c.id === ds.chapter));
     else if (ds.cmd) COMMANDS[ds.cmd]();
+    else if (ds.cible) {
+      data.cible = ds.cible;
+      const keep = inner.scrollTop;
+      inner.innerHTML = chapterHtml(idx()); afterRender(); inner.scrollTop = keep;
+      $(`[data-cible="${ds.cible}"]`).focus();
+      changed();
+    }
     else if (ds.mbx) moveMatchbox(mbx.at + +ds.mbx);
     else if (ds.box && !dragged) { const k = offsetOf(+ds.box, mbx.at); if (k) moveMatchbox(mbx.at + Math.sign(k)); }
     else if (ds.set && 'value' in ds) {

@@ -44,6 +44,24 @@ await page.waitForTimeout(200);
 assert.equal(await page.textContent('#docPreview .cv__name'), 'Inès Diallo');
 assert.ok(await page.locator('.chapter__guide .guide').count() === 1, 'identity guide');
 
+// 3b. Versatile CV: the title becomes optional and leaves no trace when empty.
+await page.click('[data-cible="polyvalent"]');
+assert.match(await page.textContent('label[for="f-jobTitle"]'), /domaines \(facultatif\)/i);
+await page.fill('#f-jobTitle', '');
+await page.waitForTimeout(200);
+assert.equal(await page.locator('#docPreview .cv__title').count(), 0);
+assert.equal(await page.locator('#docPreview .ph').count(), 0);
+await page.fill('#f-jobTitle', 'Vente · Accueil · Logistique');
+await page.waitForTimeout(200);
+assert.equal(await page.textContent('#docPreview .cv__title'), 'Vente · Accueil · Logistique');
+await page.click('[data-goto="2"]');
+await page.waitForTimeout(600);
+assert.match(await page.textContent('#assist-profil'), /CV polyvalent/);
+await page.click('[data-goto="1"]');
+await page.waitForTimeout(600);
+await page.click('[data-cible="poste"]');
+await page.fill('#f-jobTitle', 'Vendeuse conseil');
+
 // 4. Skills: guide with level meanings, one-click ideas for the chosen domain.
 await page.click('[data-goto="5"]');
 await page.waitForTimeout(600);
@@ -100,6 +118,22 @@ await page.click('[data-cmd="draft"]');
 await page.waitForTimeout(200);
 assert.match(await page.inputValue('#l-corps'), /Développeuse Full-Stack/);
 assert.ok(await page.locator('#docPreview .letter').isVisible());
+await page.waitForTimeout(500); // let the pending autosave land before editing storage
+await page.evaluate(() => {
+  const d = JSON.parse(localStorage.getItem('cvData'));
+  d.cible = 'polyvalent'; d.jobTitle = ''; d.letter.poste = ''; d.letter.objet = ''; d.letter.corps = '';
+  localStorage.setItem('cvData', JSON.stringify(d));
+});
+await page.reload();
+await page.click('[data-go="yes"]');
+await page.click('[data-doc="lettre"]');
+await page.waitForTimeout(500);
+assert.match(await page.textContent('#docPreview .letter__obj'), /Candidature spontanée/);
+await page.click('[data-goto="2"]');
+await page.waitForTimeout(600);
+await page.click('[data-cmd="draft"]');
+assert.match(await page.inputValue('#l-corps'), /candidature spontanée/);
+assert.doesNotMatch(await page.inputValue('#l-corps'), /\[poste visé\]/);
 
 // 8. Phone: one page at a time, no sideways scroll, the CV opens full screen.
 const phone = await browser.newPage({ ...devices['iPhone 13'] });
