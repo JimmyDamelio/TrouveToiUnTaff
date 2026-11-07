@@ -1,31 +1,34 @@
 /* =================================================================
-   TrouveToiUnTaf app shell. Visual thesis: a writing desk.
-   Paper ground because the product is a printed A4 sheet; Source Serif 4
-   (a text serif built for documents) on headings only; DM Sans for the UI;
-   one accent, fountain-pen blue. Flat components, 6px radius, hairline rules,
-   no blur, no glow; the only shadow sits under the sheet.
-   Motion: 120-180ms ease-out, colour/border changes only, nothing on scroll.
+   TrouveToiUnTaf app shell. Direction: design/MASTER.md.
+   Vivid complementary palette: electric violet accent on a cool lilac ground,
+   one orange element per screen for the main action, sun yellow for highlights.
+   Bricolage Grotesque on headings, DM Sans for the UI.
    ================================================================= */
 :root {
-  --paper: #f5f2ea;
-  --surface: #fffdf8;
-  --surface-2: #efebe1;
-  --ink: #1b1a17;
-  --muted: #6e6a60;
-  --rule: #e0dacd;
-  --rule-strong: #c9c1af;
-  --accent: #1f3a93;
-  --accent-hover: #172d75;
+  --paper: #f6f3ff;
+  --surface: #ffffff;
+  --surface-2: #ece7ff;
+  --ink: #17123b;
+  --muted: #5e5884;
+  --rule: #e1dbf7;
+  --rule-strong: #c6bdeb;
+  --accent: #5b2eff;
+  --accent-hover: #4a1fe6;
   --accent-ink: #ffffff;
-  --accent-soft: #e6e9f4;
-  --danger: #a4261b;
+  --accent-soft: #ece6ff;
+  --pop: #ff6b2c;
+  --pop-hover: #ff8148;
+  --pop-ink: #17123b;
+  --sun: #ffd23f;
+  --mint: #1fc59a;
+  --danger: #c62a1d;
   --warn: #8a5a00;
-  --warn-soft: #f6ecd4;
-  --success: #2f6b3a;
-  --ring: rgba(31, 58, 147, .25);
-  --sheet-shadow: 0 1px 2px rgba(40, 32, 16, .06), 0 14px 34px -14px rgba(40, 32, 16, .28);
-  --radius: 6px;
-  --f-display: 'Source Serif 4', Georgia, serif;
+  --warn-soft: #fff1c9;
+  --success: #0f8a5f;
+  --ring: rgba(91, 46, 255, .28);
+  --sheet-shadow: 0 1px 2px rgba(23, 18, 59, .08), 0 18px 40px -16px rgba(64, 30, 170, .38);
+  --radius: 8px;
+  --f-display: 'Bricolage Grotesque', 'DM Sans', system-ui, sans-serif;
   --f-ui: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --ease: cubic-bezier(.2, .7, .2, 1);
   --t: 150ms;
@@ -33,23 +36,26 @@
   color-scheme: light;
 }
 [data-theme="dark"] {
-  --paper: #161512;
-  --surface: #1e1d19;
-  --surface-2: #27251f;
-  --ink: #ede8dc;
-  --muted: #a39e91;
-  --rule: #34312a;
-  --rule-strong: #4a463c;
-  --accent: #9db0f2;
-  --accent-hover: #b9c7f6;
-  --accent-ink: #10172e;
-  --accent-soft: #232a40;
-  --danger: #f08a7e;
-  --warn: #e3b55a;
-  --warn-soft: #2e2716;
-  --success: #7fc48b;
-  --ring: rgba(157, 176, 242, .3);
-  --sheet-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 36px -14px rgba(0, 0, 0, .7);
+  --paper: #0f0b26;
+  --surface: #19143a;
+  --surface-2: #241d4d;
+  --ink: #f2eeff;
+  --muted: #ada6d6;
+  --rule: #2c2556;
+  --rule-strong: #42397a;
+  --accent: #a08bff;
+  --accent-hover: #b8a8ff;
+  --accent-ink: #0f0b26;
+  --accent-soft: #2a2160;
+  --pop: #ff7a3d;
+  --pop-hover: #ff9160;
+  --pop-ink: #17123b;
+  --danger: #ff8a7e;
+  --warn: #ffc94d;
+  --warn-soft: #33290f;
+  --success: #4fe0b0;
+  --ring: rgba(160, 139, 255, .35);
+  --sheet-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 18px 40px -16px rgba(0, 0, 0, .8);
   color-scheme: dark;
 }
 
@@ -75,8 +81,8 @@ svg.i { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor;
   transition: background-color var(--t) var(--ease), border-color var(--t) var(--ease), color var(--t) var(--ease);
 }
 .btn:hover { border-color: var(--ink); }
-.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
-.btn--primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn--primary { background: var(--pop); border-color: var(--pop); color: var(--pop-ink); font-weight: 700; box-shadow: 0 6px 18px -8px color-mix(in srgb, var(--pop) 80%, transparent); }
+.btn--primary:hover { background: var(--pop-hover); border-color: var(--pop-hover); }
 .btn--ghost { background: transparent; border-color: transparent; color: var(--ink); }
 .btn--ghost:hover { background: var(--surface-2); border-color: transparent; }
 .btn--danger:hover { color: var(--danger); }
@@ -262,7 +268,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 /* ---------- Footer, toast ---------- */
 .site-footer { max-width: 1480px; margin: 24px auto 0; padding: 24px 24px 36px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; }
 .site-footer .owner { color: var(--ink); }
-.site-footer .owner strong { font-family: var(--f-display); font-weight: 600; font-size: 15px; }
+.site-footer .owner strong { font-family: var(--f-display); font-weight: 700; font-size: 15px; }
 .toast {
   position: fixed; left: 50%; bottom: 24px; z-index: 60; max-width: min(92vw, 460px); transform: translate(-50%, 8px); opacity: 0; pointer-events: none;
   background: var(--ink); color: var(--paper); padding: 11px 16px; border-radius: var(--radius); font-size: 14px; transition: opacity var(--t) var(--ease), transform var(--t) var(--ease);

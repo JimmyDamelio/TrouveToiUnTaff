@@ -6,7 +6,15 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const OUT = 'cubic-bezier(.2, .7, .2, 1)';
+  // GSAP drives the interface motion; without it (or with reduced motion) everything is simply shown.
+  const G = () => (window.gsap && !reduced() ? window.gsap : null);
+  // Text colour on an ink: whichever of white and night indigo has the higher WCAG contrast.
+  const lum = hex => {
+    const n = parseInt(hex.slice(1), 16);
+    return [16, 8, 0].map(s => ((n >> s) & 255) / 255).map(c => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+      .reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
+  };
+  const onInk = hex => (1.05 / (lum(hex) + 0.05) >= (lum(hex) + 0.05) / (lum('#17123B') + 0.05) ? '#FFFFFF' : '#17123B');
 
   let { data, settings } = T.loadState();
   const BOOK_KEY = 'bookState', INTRO_KEY = 'introSeen';
@@ -18,24 +26,24 @@
      Chapters (inks from design/MASTER.md)
      ========================================================= */
   const CV = [
-    { id: 'photo', title: 'Ta photo', ink: '#B5513A', skip: 'Je préfère sans photo', lead: 'Une photo, ou pas : c’est toi qui décides. Tu pourras toujours l’ajouter à la fin.' },
-    { id: 'identite', title: 'Qui es-tu ?', ink: '#1F3A93', lead: 'Ton nom, le poste que tu vises et comment te joindre.' },
-    { id: 'accroche', title: 'Ton accroche', ink: '#7A3E6B', lead: 'Deux ou trois phrases qui donnent envie de lire la suite.' },
-    { id: 'experiences', title: 'Tes expériences', ink: '#1F6F78', lead: 'Tes jobs, stages et missions, du plus récent au plus ancien.' },
-    { id: 'formations', title: 'Ta formation', ink: '#56784F', lead: 'Tes diplômes et formations utiles pour le poste.' },
-    { id: 'competences', title: 'Tes compétences', ink: '#A87B12', lead: 'Ce que tu sais faire concrètement. Clique sur une idée pour l’ajouter.' },
-    { id: 'langues', title: 'Tes langues', ink: '#3D5A8C', lead: 'Les langues que tu parles, avec ton vrai niveau.' },
-    { id: 'bonus', title: 'Les petits plus', ink: '#8A5A44', skip: 'Passer cette étape', lead: 'Projets, certifications, bénévolat, permis : tout ce qui peut faire la différence. Rien d’obligatoire.' },
-    { id: 'modele', title: 'Ton modèle', ink: '#2E2B28', lead: 'Ouvre les boîtes et choisis l’habit de ton CV. Tu peux en changer à tout moment.' },
-    { id: 'finitions', title: 'Les finitions', ink: '#A8395F', lead: 'Couleur, police et mise en page. Une touche suffit.' },
-    { id: 'fin', title: 'C’est prêt', ink: '#1F3A93', lead: '' }
+    { id: 'photo', title: 'Ta photo', ink: '#FF5A5F', skip: 'Je préfère sans photo', lead: 'Une photo, ou pas : c’est toi qui décides. Tu pourras toujours l’ajouter à la fin.' },
+    { id: 'identite', title: 'Qui es-tu ?', ink: '#5B2EFF', lead: 'Ton nom, le poste que tu vises et comment te joindre.' },
+    { id: 'accroche', title: 'Ton accroche', ink: '#D9338A', lead: 'Deux ou trois phrases qui donnent envie de lire la suite.' },
+    { id: 'experiences', title: 'Tes expériences', ink: '#1F6BFF', lead: 'Tes jobs, stages et missions, du plus récent au plus ancien.' },
+    { id: 'formations', title: 'Ta formation', ink: '#13A35A', lead: 'Tes diplômes et formations utiles pour le poste.' },
+    { id: 'competences', title: 'Tes compétences', ink: '#7BC71E', lead: 'Ce que tu sais faire concrètement. Clique sur une idée pour l’ajouter.' },
+    { id: 'langues', title: 'Tes langues', ink: '#00A6B8', lead: 'Les langues que tu parles, avec ton vrai niveau.' },
+    { id: 'bonus', title: 'Les petits plus', ink: '#FF7A1A', skip: 'Passer cette étape', lead: 'Projets, certifications, bénévolat, permis : tout ce qui peut faire la différence. Rien d’obligatoire.' },
+    { id: 'modele', title: 'Ton modèle', ink: '#FFC21A', lead: 'Ouvre les boîtes et choisis l’habit de ton CV. Tu peux en changer à tout moment.' },
+    { id: 'finitions', title: 'Les finitions', ink: '#F0386B', lead: 'Couleur, police et mise en page. Une touche suffit.' },
+    { id: 'fin', title: 'C’est prêt', ink: '#5B2EFF', lead: '' }
   ];
   const LETTRE = [
-    { id: 'toi', title: 'Qui es-tu ?', ink: '#1F3A93', lead: 'Tes coordonnées, reprises en haut de la lettre. Si tu as déjà fait ton CV, elles sont déjà là.' },
-    { id: 'destinataire', title: 'À qui écris-tu ?', ink: '#1F6F78', lead: 'L’entreprise, la personne et le poste visé.' },
-    { id: 'texte', title: 'Ta lettre', ink: '#7A3E6B', lead: 'Trois paragraphes courts. Le brouillon part de ton CV, il ne te reste qu’à le personnaliser.' },
-    { id: 'modele', title: 'Ton modèle', ink: '#2E2B28', lead: 'Le même habit que ton CV, pour une candidature cohérente.' },
-    { id: 'fin', title: 'C’est prêt', ink: '#1F3A93', lead: '' }
+    { id: 'toi', title: 'Qui es-tu ?', ink: '#5B2EFF', lead: 'Tes coordonnées, reprises en haut de la lettre. Si tu as déjà fait ton CV, elles sont déjà là.' },
+    { id: 'destinataire', title: 'À qui écris-tu ?', ink: '#1F6BFF', lead: 'L’entreprise, la personne et le poste visé.' },
+    { id: 'texte', title: 'Ta lettre', ink: '#D9338A', lead: 'Trois paragraphes courts. Le brouillon part de ton CV, il ne te reste qu’à le personnaliser.' },
+    { id: 'modele', title: 'Ton modèle', ink: '#FFC21A', lead: 'Le même habit que ton CV, pour une candidature cohérente.' },
+    { id: 'fin', title: 'C’est prêt', ink: '#5B2EFF', lead: '' }
   ];
   const chapters = () => (book.doc === 'cv' ? CV : LETTRE);
   const isLetter = () => book.doc === 'lettre';
@@ -78,39 +86,50 @@
     $$('.screen').forEach(s => { if (s !== next) s.hidden = true; });
     next.hidden = false;
     $('#siteFooter').hidden = id === 'book';
-    if (!reduced()) next.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: OUT });
+    G()?.from(next, { autoAlpha: 0, y: 12, duration: 0.32, ease: 'power2.out', clearProps: 'transform,opacity,visibility' });
     window.scrollTo(0, 0);
   }
 
   /* ---------- Intro, played on the welcome screen ---------- */
-  let introAnims = [];
+  let introTl = null;
   function playIntro() {
     const title = $('#welcomeTitle');
     title.innerHTML = [...'Bienvenue.'].map(ch => `<span aria-hidden="true">${ch}</span>`).join('');
-    if (reduced()) return;
-    const short = store.get(INTRO_KEY) === '1';
-    const k = short ? 0.35 : 1, d = short ? 0.7 : 1;
-    const A = (el, frames, delay, duration, easing = OUT) => {
-      introAnims.push(el.animate(frames, { delay: delay * k, duration: duration * d, easing, fill: 'both' }));
-    };
-    const rise = [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }];
-    A($('#introSheet'), [{ opacity: 0, transform: 'translateY(-34px) rotate(-7deg)' }, { opacity: 1, transform: 'rotate(-2.5deg)' }], 0, 720);
-    $$('#introSheet .ln').forEach((ln, i) => A(ln, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], 420 + i * 90, 380));
-    A($('#introSheet .ink'), [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], 1150, 700, 'cubic-bezier(.5, 0, .2, 1)');
-    A($('#introBrand'), rise, 250, 400);
-    $$('span', title).forEach((s, i) => A(s, [{ opacity: 0, transform: 'translateY(.45em)' }, { opacity: 1, transform: 'none' }], 850 + i * 45, 460));
-    A($('#introLead'), rise, 1500, 420);
-    A($('#introQ'), rise, 1900, 420);
-    A($('#introActions'), rise, 2150, 380);
+    const g = G();
+    if (!g) return;
     const skip = $('#skipIntro');
     skip.hidden = false;
-    Promise.all(introAnims.map(a => a.finished)).then(() => { skip.hidden = true; }, () => {});
+    const tl = introTl = g.timeline({ defaults: { ease: 'power3.out' }, onComplete: () => { skip.hidden = true; } });
+    if (store.get(INTRO_KEY) === '1') tl.timeScale(2.4);
     store.set(INTRO_KEY, '1');
+    tl.from('#introSheet', { y: -40, rotation: -8, autoAlpha: 0, duration: 0.72, transformOrigin: '50% 60%' }, 0)
+      .from('#introSheet .ln', { strokeDashoffset: 1, duration: 0.38, stagger: 0.09, ease: 'power2.out' }, 0.42)
+      .from('#introSheet .ink', { strokeDashoffset: 1, duration: 0.7, ease: 'power2.inOut' }, 1.15)
+      .from('#introBrand', { y: 14, autoAlpha: 0, duration: 0.4 }, 0.25)
+      .from('#welcomeTitle span', { yPercent: 70, rotation: 10, autoAlpha: 0, duration: 0.5, stagger: 0.045, ease: 'back.out(2.2)' }, 0.75)
+      .from('#introLead', { y: 14, autoAlpha: 0, duration: 0.42 }, 1.45)
+      .from('#introQ', { y: 14, autoAlpha: 0, duration: 0.42 }, 1.8)
+      .fromTo('#introQ .hl', { '--hl': 0 }, { '--hl': 1, duration: 0.45, ease: 'power2.out' }, 2.1)
+      .from('#introActions > *', { y: 16, autoAlpha: 0, duration: 0.4, stagger: 0.08, ease: 'back.out(1.8)' }, 2.15);
+    // The 3D sheets replace the drawn one once Three.js has loaded.
+    window.TTU_SCENE?.start($('#scene'), $('.welcome__art')).then(ok => {
+      if (!ok || $('#welcome').hidden) { if (ok) window.TTU_SCENE.stop(); return; }
+      $('.welcome').classList.add('is-3d');
+      $('#scene').classList.add('is-on');
+    });
   }
   function skipIntro() {
-    introAnims.forEach(a => a.finish());
+    introTl?.progress(1);
     $('#skipIntro').hidden = true;
     $('[data-go="yes"]').focus();
+  }
+  function leaveWelcome() {
+    const sc = window.TTU_SCENE, el = $('#scene');
+    introTl?.progress(1);
+    if (!sc?.active) return 0;
+    el.classList.add('is-leaving');
+    sc.leave().then(() => { el.classList.remove('is-on', 'is-leaving'); });
+    return 0.45;
   }
 
   function openChoice() {
@@ -120,8 +139,15 @@
     };
     $('#resumeCv').textContent = resume('cv', CV);
     $('#resumeLettre').textContent = resume('lettre', LETTRE);
+    const delay = $('#welcome').hidden ? 0 : leaveWelcome();
     showScreen('choice');
     $('#choiceTitle').focus();
+    const g = G();
+    if (g) {
+      g.from('.doc-choice__eyebrow, #choiceTitle', { y: 22, autoAlpha: 0, duration: 0.45, stagger: 0.07, delay, ease: 'power3.out', clearProps: 'transform,opacity,visibility' });
+      g.from('.doc-card', { y: 46, rotation: i => (i ? 3 : -3), autoAlpha: 0, duration: 0.55, stagger: 0.1, delay: delay + 0.15, ease: 'back.out(1.6)', clearProps: 'transform,opacity,visibility' });
+      g.from('.doc-choice__more', { autoAlpha: 0, duration: 0.4, delay: delay + 0.45, clearProps: 'opacity,visibility' });
+    }
   }
 
   function openBook(doc) {
@@ -261,7 +287,7 @@
     return `<div class="done-hero">
         <p><strong id="finPages">${isLetter() ? 'Ta lettre est prête.' : 'Ton CV est prêt.'}</strong> Format A4, prêt à imprimer ou à envoyer.</p>
         <div class="done-hero__actions">
-          <button type="button" class="btn btn--ch btn--lg" data-cmd="pdf">${icon('download')}Télécharger ${doc} en PDF</button>
+          <button type="button" class="btn btn--primary btn--lg" data-cmd="pdf">${icon('download')}Télécharger ${doc} en PDF</button>
           <button type="button" class="btn btn--lg" data-cmd="fit" id="finFit" hidden>Tout faire tenir sur 1 page</button>
         </div>
         <p class="help">Une fenêtre d’impression s’ouvre : choisis « Enregistrer au format PDF » (sur iPhone : Partager, puis Enregistrer dans Fichiers).</p>
@@ -281,7 +307,7 @@
     const list = chapters(), ch = list[i], last = i === list.length - 1;
     const next = list[i + 1];
     const guide = T.guideHtml(GUIDE[ch.id] || ch.id, true);
-    return `<article class="chapter" style="--ch:${ch.ink}" data-ch="${ch.id}">
+    return `<article class="chapter" style="--ch:${ch.ink};--ch-on:${onInk(ch.ink)}" data-ch="${ch.id}">
       <div class="chapter__band"></div>
       <p class="chapter__num">Chapitre ${i + 1} sur ${list.length}</p>
       <h2 class="chapter__title" tabindex="-1">${ch.title}</h2>
@@ -299,53 +325,131 @@
     </article>`;
   }
 
-  /* ---------- Page turn: a copy of the leaving (or arriving) page rotates around the spine ---------- */
+  /* ---------- Page turn: a copy of the page, cut into hinged strips, bends around the spine ---------- */
   const inner = $('#pageInner');
-  function snapshot() {
+  const STRIPS = 6;
+  function snapshot(curl) {
+    const src = inner.cloneNode(true);
+    src.querySelectorAll('[data-mbx-thumb]').forEach(el => { el.textContent = ''; }); // 26 CV thumbnails: not worth copying
+    src.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+    src.querySelectorAll('input, textarea, select, button, a, label, summary').forEach(el => el.setAttribute('tabindex', '-1'));
+    // Typed values live in properties, not attributes: copy them so the turning page shows them.
+    const live = $$('input, textarea, select', inner), copies = $$('input, textarea, select', src);
+    copies.forEach((el, k) => { if (el.tagName === 'TEXTAREA') el.textContent = live[k].value; else if (el.tagName === 'SELECT') el.selectedIndex = live[k].selectedIndex; else el.setAttribute('value', live[k].value); });
+    const W = inner.clientWidth, H = inner.clientHeight, html = src.innerHTML, top = inner.scrollTop;
     const c = document.createElement('div');
     c.className = 'turn';
-    c.innerHTML = inner.innerHTML;
-    c.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-    c.querySelectorAll('input, textarea, select, button, a, label, summary').forEach(el => el.setAttribute('tabindex', '-1'));
     c.setAttribute('aria-hidden', 'true');
     c.style.top = `${inner.offsetTop}px`;
-    c.style.height = `${inner.clientHeight}px`;
-    c.firstElementChild && (c.firstElementChild.style.marginTop = `-${inner.scrollTop}px`);
+    c.style.height = `${H}px`;
+    const face = k => `<div class="turn__face"><div class="turn__content" style="width:${W}px;left:${-k * W / (curl ? STRIPS : 1)}px;margin-top:${-top}px">${html}</div></div>`;
+    if (!curl) { c.classList.add('turn--under'); c.innerHTML = `<div class="turn__content" style="width:${W}px;margin-top:${-top}px">${html}</div>`; return c; }
+    const sw = W / STRIPS;
+    let parent = c;
+    for (let k = 0; k < STRIPS; k++) {
+      const h = document.createElement('div');
+      h.className = 'turn__hinge';
+      h.style.width = `${sw + 0.5}px`; // half a pixel of overlap hides the seams
+      h.style.left = k ? `${sw}px` : '0';
+      h.innerHTML = face(k);
+      parent.append(h);
+      parent = h;
+    }
     return c;
   }
+  // One timeline from flat (0) to turned (1): the root strip swings round the spine, the outer strips lead, so the page curls.
+  function curlTimeline(g, el) {
+    const hinges = $$('.turn__hinge', el), faces = $$('.turn__face', el);
+    const tl = g.timeline({ paused: true });
+    tl.to(hinges[0], { rotationY: -108, duration: 0.6, ease: 'power2.inOut' }, 0);
+    hinges.slice(1).forEach((h, k) => tl.to(h, { keyframes: [{ rotationY: -(5 + k * 4), duration: 0.26, ease: 'power1.out' }, { rotationY: 0, duration: 0.34, ease: 'power1.in' }] }, 0));
+    tl.fromTo(faces, { '--shade': 0 }, { '--shade': (k) => 0.35 + k * 0.12, duration: 0.6, ease: 'power1.in' }, 0);
+    tl.to(el, { autoAlpha: 0, duration: 0.12, ease: 'none' }, 0.48);
+    return tl;
+  }
   let turning = false;
+  // Titles arrive letter by letter; words stay whole so a line never breaks inside one.
+  const splitTitle = el => {
+    el.setAttribute('aria-label', el.textContent);
+    el.innerHTML = el.textContent.replace(/ ([?!:;»])/g, '\u00a0$1').split(' ').map(w => `<span class="w" aria-hidden="true">${[...w].map(c => `<span class="c">${esc(c)}</span>`).join('')}</span>`).join(' ');
+    return $$('.c', el);
+  };
+  function enterChapter(g, delay) {
+    const chars = splitTitle($('.chapter__title', inner));
+    g.from(chars, { yPercent: 80, rotation: 8, autoAlpha: 0, duration: 0.42, stagger: 0.022, delay, ease: 'back.out(2)' });
+    g.from($$('.chapter__num, .chapter__lead, .chapter__guide, .chapter__form > *, .chapter__nav', inner).slice(0, 10),
+      { y: 16, autoAlpha: 0, duration: 0.36, stagger: 0.035, delay: delay + 0.08, ease: 'power3.out', clearProps: 'transform,opacity,visibility' });
+  }
   function renderChapter(dir) {
-    const i = idx(), page = inner.parentElement;
-    const animate = dir !== 0 && !reduced() && inner.innerHTML;
+    const i = idx(), page = inner.parentElement, g = G();
+    const animate = dir !== 0 && g && inner.innerHTML;
     let old = null;
-    if (animate) old = snapshot();
+    if (animate && dir > 0) old = snapshot(true);
+    if (animate && dir < 0) old = snapshot(false);
     inner.innerHTML = chapterHtml(i);
     inner.scrollTop = 0;
     window.scrollTo(0, 0);
-    afterRender();
+    afterRender(dir);
     if (animate) {
       turning = true;
-      const ms = 460, ease = 'cubic-bezier(.45, 0, .2, 1)';
-      let anim;
+      const done = () => { turning = false; };
       if (dir > 0) {
         page.append(old);
-        anim = old.animate([{ transform: 'rotateY(0)', filter: 'brightness(1)' }, { transform: 'rotateY(-100deg)', filter: 'brightness(.82)', opacity: 0.6 }], { duration: ms, easing: ease, fill: 'forwards' });
-        anim.finished.then(() => old.remove());
+        curlTimeline(g, old).eventCallback('onComplete', () => { old.remove(); done(); }).play();
+        enterChapter(g, 0.18);
       } else {
-        const fresh = snapshot();
-        old.classList.add('turn--under');
+        const fresh = snapshot(true);
         page.append(old, fresh);
-        anim = fresh.animate([{ transform: 'rotateY(-100deg)', filter: 'brightness(.82)', opacity: 0.6 }, { transform: 'rotateY(0)', filter: 'brightness(1)', opacity: 1 }], { duration: ms, easing: ease, fill: 'forwards' });
-        anim.finished.then(() => { old.remove(); fresh.remove(); });
+        const tl = curlTimeline(g, fresh);
+        tl.progress(1).eventCallback('onReverseComplete', () => { old.remove(); fresh.remove(); done(); }).reverse();
+        enterChapter(g, 0.5);
       }
-      anim.finished.then(() => { turning = false; });
-    }
+    } else if (g) enterChapter(g, 0);
     $('.chapter__title', inner).focus({ preventScroll: true });
   }
 
-  function afterRender() {
+  // A field that goes from empty to filled earns a check beside its label.
+  function markFilled(el, pop) {
+    const f = el.closest?.('.field');
+    if (!f || !inner.contains(f) || !('value' in el) || ['checkbox', 'radio', 'file', 'color'].includes(el.type)) return;
+    const filled = !!String(el.value).trim();
+    if (filled === f.classList.contains('is-filled')) return;
+    let ok = $('.field__ok', f);
+    if (!ok) { $('label', f)?.insertAdjacentHTML('beforeend', `<span class="field__ok" aria-hidden="true">${icon('check')}</span>`); ok = $('.field__ok', f); }
+    f.classList.toggle('is-filled', filled);
+    if (filled && pop && ok) G()?.fromTo(ok, { scale: 0, rotation: -60 }, { scale: 1, rotation: 0, duration: 0.32, ease: 'back.out(3)' });
+  }
+
+  // A burst of paper in the palette colours, once per document and per visit.
+  const celebrated = new Set();
+  function confetti() {
+    const g = G();
+    if (!g || celebrated.has(book.doc)) return;
+    celebrated.add(book.doc);
+    const host = document.createElement('div');
+    host.className = 'confetti';
+    host.setAttribute('aria-hidden', 'true');
+    const colors = ['#5B2EFF', '#FF6B2C', '#FFD23F', '#1FC59A', '#FF4F9A', '#00A6B8'];
+    const n = innerWidth < 700 ? 40 : 80;
+    host.innerHTML = Array.from({ length: n }, (_, k) => `<i style="background:${colors[k % colors.length]}"></i>`).join('');
+    document.body.append(host);
+    const R = g.utils.random;
+    $$('i', host).forEach(p => {
+      const x0 = innerWidth * R(0.3, 0.7), y0 = innerHeight * 0.55;
+      g.set(p, { x: x0, y: y0, rotation: R(0, 360), scale: R(0.6, 1.2) });
+      g.to(p, { x: x0 + R(-1, 1) * innerWidth * 0.45, duration: 1.4, ease: 'power2.out' });
+      g.to(p, { keyframes: [{ y: y0 - innerHeight * R(0.3, 0.6), duration: 0.55, ease: 'power2.out' }, { y: innerHeight + 40, duration: 0.85, ease: 'power2.in' }] });
+      g.to(p, { rotation: `+=${R(-540, 540)}`, rotationX: R(180, 720), duration: 1.4, ease: 'none' });
+    });
+    setTimeout(() => host.remove(), 1600);
+  }
+
+  function afterRender(dir = 0) {
     const list = chapters(), i = idx(), ch = list[i];
     document.documentElement.style.setProperty('--ch', ch.ink);
+    document.documentElement.style.setProperty('--ch-on', onInk(ch.ink));
+    $$('input, textarea', inner).forEach(el => markFilled(el, false));
+    if (ch.id === 'fin' && dir) setTimeout(confetti, 350);
     $('#progressLabel').textContent = `${isLetter() ? 'Lettre' : 'CV'} · chapitre ${i + 1} sur ${list.length}`;
     $('#progressFill').style.transform = `scaleX(${(i + 1) / list.length})`;
     $$('.toc__item').forEach((b, j) => { if (j === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
@@ -372,7 +476,7 @@
   function renderToc() {
     const list = chapters();
     $('#toc').innerHTML = `<p class="toc__title">${isLetter() ? 'Ta lettre' : 'Ton CV'}</p>${list.map((c, i) => `
-      <button type="button" class="toc__item" style="--ch:${c.ink}" data-goto="${i}"${i === idx() ? ' aria-current="step"' : ''}>
+      <button type="button" class="toc__item" style="--ch:${c.ink};--ch-on:${onInk(c.ink)}" data-goto="${i}"${i === idx() ? ' aria-current="step"' : ''}>
         <span class="toc__n">${i + 1}</span><span>${c.title}</span><span class="toc__done" data-done="${c.id}"></span></button>`).join('')}`;
   }
   const DONE = {
@@ -381,7 +485,18 @@
     langues: d => d.langues.some(isFilled), toi: d => d.fullName.trim(), destinataire: d => d.letter.entreprise.trim(), texte: d => d.letter.corps.trim()
   };
   function updateToc() {
-    $$('[data-done]').forEach(el => { el.innerHTML = DONE[el.dataset.done]?.(data) ? icon('check') : ''; });
+    $$('[data-done]').forEach(el => {
+      const done = !!DONE[el.dataset.done]?.(data), was = el.dataset.state;
+      el.dataset.state = done ? 'done' : 'todo';
+      if (was === el.dataset.state) return;
+      el.innerHTML = done ? icon('check') : '';
+      const g = G();
+      if (!done || !was || !g) return; // first paint: no fanfare
+      g.fromTo($('svg', el), { scale: 0, rotation: -90 }, { scale: 1, rotation: 0, duration: 0.4, ease: 'back.out(3)' });
+      el.insertAdjacentHTML('beforeend', '<i class="toc__ring"></i>');
+      const ring = el.lastElementChild;
+      g.fromTo(ring, { scale: 0.4, opacity: 1 }, { scale: 2.2, opacity: 0, duration: 0.6, ease: 'power2.out', onComplete: () => ring.remove() });
+    });
   }
 
   /* =========================================================
@@ -392,12 +507,32 @@
   const docHtml = () => (isLetter() ? T.renderLetter(data, settings) : T.renderCv(data, settings));
   T.setPrintSource(docHtml);
   function queueRender() { cancelAnimationFrame(raf); raf = requestAnimationFrame(renderDoc); }
+  // The block that just changed in the live document is lit in the chapter ink, then fades.
+  // The light is a layer above the preview, never part of the document or the PDF.
+  const BLOCKS = '.cv__head, .cv-sec, .letter__to, .letter__obj, .letter__body, .letter__sign';
+  let flashNext = false;
+  function flash(before) {
+    const g = G(), now = $$(BLOCKS, preview);
+    if (!g || !before || before.length !== now.length) return;
+    const s0 = sizer.getBoundingClientRect();
+    now.filter((el, k) => el.textContent !== before[k]).slice(0, 2).forEach(el => {
+      const r = el.getBoundingClientRect();
+      const f = document.createElement('div');
+      f.className = 'flash';
+      Object.assign(f.style, { left: `${r.left - s0.left - 4}px`, top: `${r.top - s0.top - 3}px`, width: `${r.width + 8}px`, height: `${r.height + 6}px` });
+      sizer.append(f);
+      g.fromTo(f, { opacity: 1 }, { opacity: 0, duration: 0.7, delay: 0.2, ease: 'power1.in', onComplete: () => f.remove() });
+    });
+  }
   function renderDoc() {
     if ($('#book').hidden) return;
+    const before = flashNext ? $$(BLOCKS, preview).map(el => el.textContent) : null;
+    flashNext = false;
     preview.innerHTML = docHtml();
     $('#docTitle').textContent = isLetter() ? 'Ta lettre en direct' : 'Ton CV en direct';
     $('.peek-btn').lastChild.textContent = isLetter() ? 'Voir ma lettre' : 'Voir mon CV';
     fitPreview();
+    flash(before);
     renderTips();
     updateToc();
   }
@@ -564,7 +699,7 @@
 
   document.addEventListener('input', e => {
     const t = e.target, ds = t.dataset;
-    if (T.applyInput(t, data)) { /* data field */ }
+    if (T.applyInput(t, data)) { flashNext = true; markFilled(t, true); }
     else if (ds.set === 'accent-custom') { settings.accent = t.value.toLowerCase(); }
     else if (t.id === 'domain') { settings.domain = t.value; }
     else return;
