@@ -115,7 +115,7 @@ window.TTU = (() => {
   const blankItem = list => Object.fromEntries(LISTS[list].fields.map(f => [f.key, f.default || '']));
   const blankLetter = () => ({ ...Object.fromEntries(LETTER_FIELDS.map(k => [k, ''])), ...LETTER_DEFAULTS });
   const blankData = () => ({
-    photo: '',
+    photo: '', cible: 'poste',
     ...Object.fromEntries(TEXT_FIELDS.map(k => [k, ''])),
     ...Object.fromEntries(Object.keys(LISTS).map(k => [k, []])),
     letter: blankLetter()
@@ -144,6 +144,7 @@ window.TTU = (() => {
     if (raw.letter && typeof raw.letter === 'object') {
       for (const k of LETTER_FIELDS) if (str(raw.letter[k])) d.letter[k] = str(raw.letter[k]);
     }
+    d.cible = raw.cible === 'polyvalent' ? 'polyvalent' : 'poste';
     return d;
   }
 
@@ -241,12 +242,13 @@ window.TTU = (() => {
     const name = !full ? '<span class="ph">Ton nom</span>'
       : cut < 0 ? `<span class="cv__last">${esc(full)}</span>`
         : `<span class="cv__first">${esc(full.slice(0, cut))}</span> <span class="cv__last">${esc(full.slice(cut + 1))}</span>`;
-    const title = d.jobTitle.trim() ? esc(d.jobTitle) : '<span class="ph">Ton titre professionnel</span>';
+    // A versatile CV may have no title: the line is left out rather than shown empty.
+    const title = d.jobTitle.trim() ? esc(d.jobTitle) : d.cible === 'polyvalent' ? '' : '<span class="ph">Ton titre professionnel</span>';
     const contacts = [d.email, d.phone, d.address, d.website].map(s => s.trim()).filter(Boolean);
     return {
       photo,
       contact: contacts.length ? `<ul class="cv__contact">${contacts.map(c => `<li>${esc(c)}</li>`).join('')}</ul>` : '',
-      identity: `<div class="cv__id"><h1 class="cv__name">${name}</h1><p class="cv__title">${title}</p></div>`
+      identity: `<div class="cv__id"><h1 class="cv__name">${name}</h1>${title ? `<p class="cv__title">${title}</p>` : ''}</div>`
     };
   }
 
@@ -283,7 +285,8 @@ window.TTU = (() => {
     return layout(d, s, pick(visible.filter(inSide)), pick(visible.filter(k => !inSide(k))), pick(visible));
   }
 
-  const defaultObjet = d => `Candidature au poste de ${d.letter.poste.trim() || d.jobTitle.trim() || '[poste visé]'}`;
+  const targetJob = d => d.letter.poste.trim() || (d.cible === 'poste' ? d.jobTitle.trim() : '');
+  const defaultObjet = d => (targetJob(d) ? `Candidature au poste de ${targetJob(d)}` : 'Candidature spontanée');
   function renderLetter(d, s) {
     const L = d.letter, ph = x => `<span class="ph">${x}</span>`;
     const to = [L.entreprise.trim() ? `<strong>${esc(L.entreprise)}</strong>` : ph('Entreprise'),
@@ -315,7 +318,8 @@ window.TTU = (() => {
     const email = d.email.trim();
     if (email && !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) add('identite', 'L’adresse email semble incomplète.');
     if (d.phone.trim() && d.phone.replace(/\D/g, '').length < 9) add('identite', 'Le numéro de téléphone semble incomplet.');
-    if (d.fullName.trim() && !d.jobTitle.trim()) add('identite', 'Ajoute un <b>titre professionnel</b> : c’est la première ligne que lit le recruteur.');
+    if (d.cible === 'poste' && d.fullName.trim() && !d.jobTitle.trim()) add('identite', 'Ajoute un <b>titre professionnel</b>, ou choisis « Plusieurs postes » si ton CV vise plusieurs métiers.');
+    if (d.cible === 'polyvalent' && d.profil.trim() && !d.objectif.trim() && !d.jobTitle.trim()) add('profil', 'CV polyvalent : cite 2 ou 3 types de postes dans ton objectif (vente, accueil…), le recruteur verra tout de suite où te placer.');
 
     const p = d.profil.trim();
     if (p) {
@@ -571,18 +575,20 @@ window.TTU = (() => {
 
   function buildDraft(data) {
     const L = data.letter;
-    const poste = L.poste.trim() || data.jobTitle.trim() || '[poste visé]';
+    const poste = targetJob(data);
     const ent = L.entreprise.trim() || '[nom de l’entreprise]';
     const exp = data.experiences.find(isFilled), form = data.formations.find(isFilled);
     const skills = data.competences.filter(isFilled).slice(0, 3).map(c => c.nom.trim()).filter(Boolean);
     const list = a => a.length > 1 ? `${a.slice(0, -1).join(', ')} et ${a[a.length - 1]}` : a[0];
     const where = x => x.trim() ? ` chez ${x.trim().split(',')[0]}` : '';
-    const p1 = `Votre offre pour le poste de ${poste} a retenu toute mon attention. [Ce qui t’attire chez ${ent} : un projet, une valeur, un produit précis.]`;
+    const p1 = poste
+      ? `Votre offre pour le poste de ${poste} a retenu toute mon attention. [Ce qui t’attire chez ${ent} : un projet, une valeur, un produit précis.]`
+      : `Je vous adresse ma candidature spontanée, car [ce qui t’attire chez ${ent} : un projet, une valeur, un produit précis]. Polyvalent(e), je peux mettre mes compétences au service de plusieurs de vos équipes.`;
     let p2 = exp
       ? `Mon expérience de ${exp.poste.trim() || '[poste]'}${where(exp.entreprise)} m’a permis de [résultat concret, idéalement chiffré].`
       : form ? `Titulaire d’un ${form.titre.trim()}${form.ecole.trim() ? ` (${form.ecole.trim()})` : ''}, j’ai acquis [les compétences clés pour ce poste].`
         : '[Ton parcours en une ou deux phrases.]';
-    if (skills.length) p2 += ` Je maîtrise notamment ${list(skills)}, des atouts directement utiles pour ce poste.`;
+    if (skills.length) p2 += ` Je maîtrise notamment ${list(skills)}, des atouts directement utiles ${poste ? 'pour ce poste' : 'pour vos équipes'}.`;
     const p3 = `Rejoindre ${ent}, c’est pour moi l’occasion de [ce que tu veux apporter ou apprendre]. Je serais ravi(e) de vous exposer ma motivation lors d’un entretien.`;
     return [p1, p2, p3].join('\n\n');
   }
@@ -621,7 +627,7 @@ window.TTU = (() => {
     KEYS, SKILL_LEVELS, LANG_LEVELS, TEXT_FIELDS, LETTER_FIELDS, LETTER_DEFAULTS, TABS, MAX_IMPORT_BYTES, MAX_ITEMS, MM, A4_W, A4_H,
     LISTS, SECTIONS, DEFAULT_ORDER, blankItem, blankLetter, blankData, defaultSettings, normalize, normalizeSettings,
     esc, store, icon, isFilled, hasContent, plural, today, densityValue,
-    renderCv, renderLetter, defaultObjet, analyze, resizeImage,
+    renderCv, renderLetter, defaultObjet, targetJob, analyze, resizeImage,
     loadState, saveState, paginate, measure, setPrintSource, printDoc, fitOnePage,
     listHtml, missionAssist, listAction, applyInput, insertText, buildDraft, fileSlug, guideHtml, suggestHtml, addSuggestion
   };

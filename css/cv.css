@@ -669,4 +669,5 @@
   body > *:not(#printHost) { display: none !important; }
   #printHost { position: static; left: auto; width: 210mm; }
   #printHost > .cv { box-shadow: none !important; }
+  #printHost .ph { display: none !important; }
 }

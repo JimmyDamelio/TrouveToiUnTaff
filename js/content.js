@@ -206,6 +206,13 @@ window.TTU_CONTENT = (() => {
     }
   };
 
+  // Hooks for a CV that targets several jobs at once.
+  const POLY_PROFILS = [
+    'Polyvalent(e) et rapide à prendre en main de nouvelles missions, j’ai travaillé en [domaine 1], en [domaine 2] et en [domaine 3]. Je cherche un poste où ma capacité d’adaptation sera utile dès le premier jour.',
+    'À l’aise avec le public comme avec les tâches d’organisation, j’ai acquis en [X] ans des compétences en [compétence 1], [compétence 2] et [compétence 3], que je peux mettre au service de plusieurs métiers.',
+    'Fiable, ponctuel(le) et motivé(e), je recherche un emploi en [domaine 1] ou en [domaine 2], disponible [à partir de quand]. J’apprends vite et j’aime travailler en équipe.'
+  ];
+
   const VERBS = ['Piloté', 'Conçu', 'Développé', 'Lancé', 'Négocié', 'Optimisé', 'Réduit', 'Augmenté', 'Organisé', 'Encadré',
     'Formé', 'Coordonné', 'Analysé', 'Créé', 'Mis en place', 'Géré', 'Amélioré', 'Automatisé', 'Fidélisé', 'Rédigé',
     'Animé', 'Résolu', 'Supervisé', 'Accompagné', 'Réalisé', 'Planifié', 'Déployé', 'Simplifié'];
@@ -293,7 +300,7 @@ window.TTU_CONTENT = (() => {
     photo: { q: 'Faut-il mettre une photo ?', body: 'En France, la photo n’est pas obligatoire. Elle aide surtout pour les métiers en contact avec le public : vente, accueil, restauration.',
       tips: ['Fond clair et uni, cadrage du visage aux épaules.', 'Une tenue proche de celle du poste visé.', 'Pas de selfie, de photo de vacances ni de lunettes de soleil.', 'Grande entreprise qui trie les CV par logiciel : le modèle ATS Sobre n’affiche pas de photo.'] },
     identite: { q: 'Quelles infos mettre ?', body: 'Juste ce qu’il faut pour qu’on te recontacte facilement.',
-      tips: ['Un email sérieux, idéalement prenom.nom@…', 'Ta ville suffit, pas besoin de l’adresse complète.', 'Le titre, c’est le poste que tu vises, pas forcément celui que tu occupes.', 'Âge, situation familiale, numéro de sécurité sociale : inutile, ce n’est pas demandé.'] },
+      tips: ['Un email sérieux, idéalement prenom.nom@…', 'Ta ville suffit, pas besoin de l’adresse complète.', 'Le titre, c’est le poste que tu vises, pas forcément celui que tu occupes.', 'Tu vises plusieurs métiers ? Choisis « Plusieurs postes » : le titre devient facultatif, ou liste 2 ou 3 domaines (« Vente · Accueil · Logistique »).', 'Âge, situation familiale, numéro de sécurité sociale : inutile, ce n’est pas demandé.'] },
     accroche: { q: 'C’est quoi, une accroche ?', body: '2 ou 3 phrases tout en haut du CV : qui tu es, ce que tu apportes, ce que tu cherches. C’est souvent la seule partie lue en entier.',
       tips: ['Adapte-la à chaque offre en reprenant un ou deux mots de l’annonce.', 'Parle de ce que tu sais faire, pas seulement de tes qualités.', 'L’objectif dit le poste ou le contrat visé, et quand tu es disponible.'] },
     experiences: { q: 'Qu’est-ce qui compte comme expérience ?', body: 'Tout ce où tu as travaillé : CDI, CDD, intérim, stage, alternance, job d’été, mission en freelance.',
@@ -317,5 +324,5 @@ window.TTU_CONTENT = (() => {
       tips: ['Vous : ce qui t’attire chez cette entreprise, précisément.', 'Moi : une ou deux réussites qui prouvent que tu peux faire le poste.', 'Nous : ce que vous ferez ensemble, et la demande d’entretien.', '250 à 350 mots, c’est la bonne longueur.'] }
   };
 
-  return { TEMPLATES, FONTS, ACCENTS, DENSITIES, LEVEL_STYLES, DOMAINS, VERBS, WEAK, CLOSINGS, EXAMPLE, SKILLS, LANGUAGES, LEVEL_HINTS, GUIDES };
+  return { POLY_PROFILS, TEMPLATES, FONTS, ACCENTS, DENSITIES, LEVEL_STYLES, DOMAINS, VERBS, WEAK, CLOSINGS, EXAMPLE, SKILLS, LANGUAGES, LEVEL_HINTS, GUIDES };
 })();
